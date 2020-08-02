@@ -1,4 +1,4 @@
-import datetime
+from dateutil.parser import isoparse
 
 from django_filters import FilterSet, CharFilter, NumberFilter, AllValuesFilter, AllValuesMultipleFilter
 from django_filters.views import FilterView
@@ -76,7 +76,7 @@ class FilteredSponsortimeListView(SingleTableMixin, FilterView):
         # Call the base implementation first to get a context
         context = super(FilteredSponsortimeListView, self).get_context_data(**kwargs)
         # Add in the publisher
-        context['updated'] = datetime.datetime.fromisoformat(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
         return context
 
 
@@ -90,7 +90,7 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context = super(FilteredVideoListView, self).get_context_data(**kwargs)
         # Add in the publisher
         context['videoid'] = self.videoid
-        context['updated'] = datetime.datetime.fromisoformat(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
         return context
 
     table_class = VideoTable
@@ -109,7 +109,7 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         context = super(FilteredUsernameListView, self).get_context_data(**kwargs)
         # Add in the publisher
         context['username'] = self.username
-        context['updated'] = datetime.datetime.fromisoformat(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
         return context
 
     table_class = UsernameTable
@@ -128,7 +128,7 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         context = super(FilteredUserIDListView, self).get_context_data(**kwargs)
         # Add in the publisher
         context['userid'] = self.userid
-        context['updated'] = datetime.datetime.fromisoformat(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
         return context
 
     table_class = UserIDTable
