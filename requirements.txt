@@ -1,0 +1,5 @@
+Django
+django-tables2
+django-bootstrap4
+django-filter
+psycopg2

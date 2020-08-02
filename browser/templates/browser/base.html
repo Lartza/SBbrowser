@@ -1,0 +1,71 @@
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SB Browser</title>
+    {% bootstrap_css %}
+    <style>
+        textarea {
+            resize: horizontal;
+        }
+        button {
+            border: none;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="/">SB Browser</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        {% block body %}
+        {% endblock %}
+        <div class="row">
+            <div class="col">
+                Last update: {{ updated }} All times UTC
+            </div>
+            <div class="col">
+                Site &copy; {% now 'Y' %} Lartza; SponsorBlock data is used under CC BY-NC-SA 4.0. More details: <a href="https://sponsor.ajay.app/">https://sponsor.ajay.app/</a>
+            </div>
+        </div>
+    </div>
+    {% bootstrap_javascript jquery="slim" %}
+    <script type="text/javascript">
+        const copyToClipboard = str => {
+            const el = document.createElement('textarea');  // Create a <textarea> element
+            el.value = str;                                 // Set its value to the string that you want copied
+            el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+            el.style.position = 'absolute';
+            el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+            document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+            const selected =
+                document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+                    ? document.getSelection().getRangeAt(0)     // Store selection if found
+                    : false;                                    // Mark as false to know no selection existed before
+            el.select();                                    // Select the <textarea> content
+            document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+            document.body.removeChild(el);                  // Remove the <textarea> element
+            if (selected) {                                 // If a selection existed before copying
+                document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+                document.getSelection().addRange(selected);   // Restore the original selection
+            }
+        };
+    </script>
+</body>
+</html>
