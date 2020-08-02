@@ -31,10 +31,14 @@ class SponsortimeTable(tables.Table):
 
     @staticmethod
     def render_starttime(value):
+        if value < 0:
+            return '-' + str(datetime.timedelta(seconds=-value))
         return datetime.timedelta(seconds=value)
 
     @staticmethod
     def render_endtime(value):
+        if value < 0:
+            return '-' + str(datetime.timedelta(seconds=-value))
         return datetime.timedelta(seconds=value)
 
     @staticmethod
