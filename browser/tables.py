@@ -18,11 +18,12 @@ class SponsortimeTable(tables.Table):
                                    '<a href="/userid/{{ value }}/">🔗</a>',
                                    verbose_name='UserID', accessor='user_id')
     username = UsernameColumn(accessor='user__username')
+    length = tables.Column()
 
     class Meta:
         model = Sponsortime
         exclude = ('incorrectvotes', 'user')
-        sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'votes', 'views', 'category', 'shadowhidden',
+        sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category', 'shadowhidden',
                     'uuid', 'username')
 
     @staticmethod
@@ -61,19 +62,33 @@ class SponsortimeTable(tables.Table):
             qs = qs.select_related('user').order_by(F('user__username').asc(nulls_last=True))
         return qs, True
 
+    @staticmethod
+    def render_length(value):
+        return datetime.timedelta(seconds=value)
+
+    @staticmethod
+    def order_length(qs, is_descending):
+        qs = qs.annotate(
+            length=F("endtime") - F("starttime")
+        ).order_by(("-" if is_descending else "") + "length")
+        return qs, True
+
 
 class VideoTable(SponsortimeTable):
     class Meta:
         exclude = ('videoid',)
-        sequence = ('timesubmitted', 'starttime', 'endtime', 'votes', 'views', 'category', 'shadowhidden', 'uuid',
+        sequence = ('timesubmitted', 'starttime', 'endtime', 'length', 'votes', 'views', 'category', 'shadowhidden', 'uuid',
                     'username')
 
 
 class UsernameTable(SponsortimeTable):
     class Meta:
         exclude = ('username',)
+        sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category', 'shadowhidden',
+                    'uuid')
 
 
 class UserIDTable(SponsortimeTable):
     class Meta:
         exclude = ('username', 'userid')
+        sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category', 'shadowhidden')

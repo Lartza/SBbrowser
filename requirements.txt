@@ -1,6 +1,6 @@
-Django
-django-tables2
-django-bootstrap4
-django-filter
-psycopg2
-python-dateutil
+Django==3.0.9
+django-bootstrap4==2.2.0
+django-tables2==2.3.1
+django-filter==2.3.0
+psycopg2==2.8.5
+python-dateutil==2.8.1

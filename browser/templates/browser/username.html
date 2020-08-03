@@ -1,4 +1,7 @@
 {% extends "browser/base.html" %}
+{% block head %}
+    <title>Username | SB Browser</title>
+{% endblock head %}
 {% block body %}
     <div class="row">
         <div class="col-4">
@@ -8,9 +11,5 @@
             Ignored: X
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            {% include "browser/table.html" %}
-        </div>
-    </div>
+    {% include "browser/table.html" %}
 {% endblock body %}

@@ -68,6 +68,9 @@ class Sponsortime(models.Model):
     def ignored(self):
         return self.votes <= -2
 
+    def length(self):
+        return self.endtime - self.starttime
+
 
 class Vipuser(models.Model):
     userid = models.TextField(primary_key=True, unique=True, null=False)

@@ -1,10 +1,11 @@
+{% load static %}
 {% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SB Browser</title>
-    {% bootstrap_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'browser/toggle-bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'browser/toggle-bootstrap-dark.min.css' %}">
     <style>
         textarea {
             resize: horizontal;
@@ -14,12 +15,14 @@
             background: none;
         }
     </style>
+    {% block head %}
+    {% endblock head %}
 </head>
-<body>
+<body class="bootstrap-dark">
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar navbar-expand-lg navbar-themed">
                     <a class="navbar-brand" href="/">SB Browser</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -31,6 +34,7 @@
                             </li>
                         </ul>
                     </div>
+                    <button class="btn btn-secondary" id="css_toggle" title="Dark mode toggle">Dark/Light</button>
                 </nav>
             </div>
         </div>
@@ -66,6 +70,23 @@
                 document.getSelection().addRange(selected);   // Restore the original selection
             }
         };
+
+        $('form').submit(function() {
+            $(':input', this).each(function() {
+                this.disabled = !($(this).val());
+            });
+        });
+
+        function resetForm($form) {
+            $form.find('input:text, input:password, input:file, select, textarea').val('');
+            $form.find(':input[type=number]').val('');
+            $form.find('input:radio, input:checkbox')
+                 .removeAttr('checked').removeAttr('selected');
+        }
+
+        $('#css_toggle').click(function() {
+          $('body').toggleClass('bootstrap bootstrap-dark');
+        });
     </script>
 </body>
 </html>
