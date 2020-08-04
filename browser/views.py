@@ -3,7 +3,7 @@ from dateutil.parser import isoparse
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
-from .models import Config
+from .models import Config, Username
 from .tables import *
 from .filters import *
 
@@ -36,6 +36,8 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context = super(FilteredVideoListView, self).get_context_data(**kwargs)
 
         context['videoid'] = self.videoid
+        context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
+        context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
         context['updated'] = updated()
         return context
 
@@ -54,6 +56,9 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         context = super(FilteredUsernameListView, self).get_context_data(**kwargs)
 
         context['username'] = self.username
+        context['uniques'] = Username.objects.filter(username=self.username).count()
+        context['submissions'] = Sponsortime.objects.filter(user__username=self.username).count()
+        context['ignored'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).count()
         context['updated'] = updated()
         return context
 
@@ -72,6 +77,9 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         context = super(FilteredUserIDListView, self).get_context_data(**kwargs)
 
         context['userid'] = self.userid
+        context['username'] = Username.objects.get(userid=self.userid).username
+        context['submissions'] = Sponsortime.objects.filter(user=self.userid).count()
+        context['ignored'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).count()
         context['updated'] = updated()
         return context
 

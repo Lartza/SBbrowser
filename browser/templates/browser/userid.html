@@ -4,11 +4,12 @@
 {% endblock head %}
 {% block body %}
     <div class="row">
-        <div class="col-4">
-            # TODO: implement
-            Username: X
-            Submissions: X
-            Ignored: X
+        <div class="col">
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">Username: {{ username }}</li>
+                <li class="list-group-item">Submissions: {{ submissions }}</li>
+                <li class="list-group-item">Ignored: {{ ignored }}</li>
+            </ul>
         </div>
     </div>
     {% include "browser/table.html" %}

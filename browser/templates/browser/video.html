@@ -10,9 +10,10 @@
             </div>
         </div>
         <div class="col-4">
-            # TODO: implement
-            Submissions: X
-            Ignored: X
+            <ul class="list-group">
+                <li class="list-group-item">Submissions: {{ submissions }}</li>
+                <li class="list-group-item">Ignored: {{ ignored }}</li>
+            </ul>
         </div>
     </div>
     {% include "browser/table.html" %}
