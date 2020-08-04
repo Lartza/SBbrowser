@@ -1,68 +1,15 @@
 from dateutil.parser import isoparse
 
-from django_filters import FilterSet, CharFilter, NumberFilter, AllValuesFilter, AllValuesMultipleFilter
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
-from .models import Sponsortime, Config
-from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
+from .models import Config
+from .tables import *
+from .filters import *
 
 
-class SponsortimeFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Shadowhidden')
-    username = CharFilter(field_name='user__username', label='Username')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
-
-
-class VideoFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
-    username = CharFilter(field_name='user__username', label='Username')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
-
-
-class UsernameFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
-
-
-class UserIDFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
-
-    class Meta:
-        model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
+def updated():
+    return isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
 
 
 class FilteredSponsortimeListView(SingleTableMixin, FilterView):
@@ -73,10 +20,9 @@ class FilteredSponsortimeListView(SingleTableMixin, FilterView):
     filterset_class = SponsortimeFilter
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super(FilteredSponsortimeListView, self).get_context_data(**kwargs)
-        # Add in the publisher
-        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+
+        context['updated'] = updated()
         return context
 
 
@@ -86,11 +32,11 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
+
         context = super(FilteredVideoListView, self).get_context_data(**kwargs)
-        # Add in the publisher
+
         context['videoid'] = self.videoid
-        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = updated()
         return context
 
     table_class = VideoTable
@@ -105,11 +51,10 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         return Sponsortime.objects.filter(user__username=self.username).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super(FilteredUsernameListView, self).get_context_data(**kwargs)
-        # Add in the publisher
+
         context['username'] = self.username
-        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = updated()
         return context
 
     table_class = UsernameTable
@@ -124,11 +69,10 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         return Sponsortime.objects.filter(user=self.userid).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
         context = super(FilteredUserIDListView, self).get_context_data(**kwargs)
-        # Add in the publisher
+
         context['userid'] = self.userid
-        context['updated'] = isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+        context['updated'] = updated()
         return context
 
     table_class = UserIDTable
