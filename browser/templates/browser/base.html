@@ -51,6 +51,19 @@
     </div>
     {% bootstrap_javascript jquery="slim" %}
     <script type="text/javascript">
+        if (localStorage.getItem('theme') !== null && localStorage.getItem('theme') === 'light') {
+            $('body').toggleClass('bootstrap bootstrap-dark');
+        }
+
+        $('#css_toggle').click(function() {
+          $('body').toggleClass('bootstrap bootstrap-dark');
+          if (localStorage.getItem('theme') === null || localStorage.getItem('theme') === 'dark') {
+              localStorage.setItem('theme', 'light');
+          } else {
+              localStorage.setItem('theme', 'dark');
+          }
+        });
+
         const copyToClipboard = str => {
             const el = document.createElement('textarea');  // Create a <textarea> element
             el.value = str;                                 // Set its value to the string that you want copied
@@ -83,10 +96,6 @@
             $form.find('input:radio, input:checkbox')
                  .removeAttr('checked').removeAttr('selected');
         }
-
-        $('#css_toggle').click(function() {
-          $('body').toggleClass('bootstrap bootstrap-dark');
-        });
     </script>
 </body>
 </html>
