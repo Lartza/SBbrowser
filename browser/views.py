@@ -77,7 +77,10 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         context = super(FilteredUserIDListView, self).get_context_data(**kwargs)
 
         context['userid'] = self.userid
-        context['username'] = Username.objects.get(userid=self.userid).username
+        try:
+            context['username'] = Username.objects.get(userid=self.userid).username
+        except Username.DoesNotExist:
+            context['username'] = '—'
         context['submissions'] = Sponsortime.objects.filter(user=self.userid).count()
         context['ignored'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).count()
         context['updated'] = updated()
