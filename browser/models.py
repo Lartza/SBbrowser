@@ -27,7 +27,7 @@ from django.db import models
 
 
 class Config(models.Model):
-    key = models.TextField(primary_key=True, unique=True, null=False)
+    key = models.TextField(primary_key=True, unique=True)
     value = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -36,44 +36,44 @@ class Config(models.Model):
 
 
 class Username(models.Model):
-    userid = models.TextField(primary_key=True, unique=True, null=False)
-    username = models.TextField(verbose_name='Username', null=False)
+    userid = models.TextField(primary_key=True, unique=True)
+    username = models.TextField(verbose_name='Username')
 
     class Meta:
         managed = False
         db_table = 'usernames'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.userid
 
 
 class Sponsortime(models.Model):
-    videoid = models.TextField(verbose_name='Video ID', null=False)
-    starttime = models.FloatField(verbose_name='Start', null=False)
-    endtime = models.FloatField(verbose_name='End', null=False)
-    votes = models.BigIntegerField(null=False)
-    incorrectvotes = models.BigIntegerField(null=False)
-    uuid = models.TextField(verbose_name='UUID', primary_key=True, unique=True, null=False)
+    videoid = models.TextField(verbose_name='Video ID')
+    starttime = models.FloatField(verbose_name='Start')
+    endtime = models.FloatField(verbose_name='End')
+    votes = models.BigIntegerField()
+    incorrectvotes = models.BigIntegerField()
+    uuid = models.TextField(verbose_name='UUID', primary_key=True, unique=True)
     user = models.ForeignKey(Username, verbose_name='UserID', on_delete=models.PROTECT, db_constraint=False,
                              null=False, db_column='userid')
-    timesubmitted = models.BigIntegerField(verbose_name='Submitted', null=False)
-    views = models.BigIntegerField(null=False)
-    category = models.TextField(null=False)
-    shadowhidden = models.BigIntegerField(verbose_name='Hidden', null=False)
+    timesubmitted = models.BigIntegerField(verbose_name='Submitted')
+    views = models.BigIntegerField()
+    category = models.TextField()
+    shadowhidden = models.BigIntegerField(verbose_name='Hidden')
 
     class Meta:
         managed = False
         db_table = 'sponsortimes'
 
-    def ignored(self):
+    def ignored(self) -> int:
         return self.votes <= -2
 
-    def length(self):
+    def length(self) -> float:
         return self.endtime - self.starttime
 
 
 class Vipuser(models.Model):
-    userid = models.TextField(primary_key=True, unique=True, null=False)
+    userid = models.TextField(primary_key=True, unique=True)
 
     class Meta:
         managed = False

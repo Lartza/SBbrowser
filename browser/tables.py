@@ -22,35 +22,35 @@ class SponsortimeTable(tables.Table):
                     'shadowhidden', 'uuid', 'username')
 
     @staticmethod
-    def render_timesubmitted(value):
+    def render_timesubmitted(value: float) -> str:
         return datetime.datetime.utcfromtimestamp(value/1000.).strftime('%Y-%m-%d %H:%M:%S')
 
     @staticmethod
-    def render_starttime(value):
+    def render_starttime(value: float) -> str:
         if value < 0:
             return '-' + str(datetime.timedelta(seconds=-value))
-        return datetime.timedelta(seconds=value)
+        return str(datetime.timedelta(seconds=value))
 
     @staticmethod
-    def render_endtime(value):
+    def render_endtime(value: float) -> str:
         if value < 0:
             return '-' + str(datetime.timedelta(seconds=-value))
-        return datetime.timedelta(seconds=value)
+        return str(datetime.timedelta(seconds=value))
 
     @staticmethod
-    def render_votes(value):
+    def render_votes(value: int) -> str:
         if value <= -2:
             return f'{value} ❌'
-        return value
+        return str(value)
 
     @staticmethod
-    def render_shadowhidden(value):
+    def render_shadowhidden(value: int) -> str:
         if value == 1:
             return '❌'
         return '—'
 
     @staticmethod
-    def order_username(qs, is_descending):
+    def order_username(qs: QuerySet, is_descending: bool) -> (QuerySet, bool):
         if is_descending:
             qs = qs.select_related('user').order_by(F('user__username').desc(nulls_last=True))
         else:
