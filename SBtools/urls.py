@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """SBtools URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

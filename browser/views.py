@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 from dateutil.parser import isoparse
 from typing import Dict, Any
 

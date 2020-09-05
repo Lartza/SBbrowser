@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 from django_filters import FilterSet, CharFilter, NumberFilter, AllValuesFilter, AllValuesMultipleFilter
 
 from .models import Sponsortime
