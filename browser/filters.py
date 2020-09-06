@@ -7,9 +7,23 @@ from .models import Sponsortime
 FIELDS = ['videoid', 'votes', 'views', 'category', 'shadowhidden', 'uuid', 'username', 'user']
 
 
+class CustomRangeWidget(RangeWidget):
+    def __init__(self, attrs=None, from_attrs=None, to_attrs=None):
+        super().__init__(attrs)
+
+        if from_attrs:
+            self.widgets[0].attrs.update(from_attrs)
+        if to_attrs:
+            self.widgets[1].attrs.update(to_attrs)
+
+
 class UserIDFilter(FilterSet):
-    votes = RangeFilter(widget=RangeWidget(attrs={'type': 'number', 'step': 1}))
-    views = RangeFilter(widget=RangeWidget(attrs={'type': 'number', 'step': 1}))
+    votes = RangeFilter(widget=CustomRangeWidget(attrs={'type': 'number', 'step': 1},
+                                                 from_attrs={'placeholder': 'Votes from'},
+                                                 to_attrs={'placeholder': 'Votes to'}))
+    views = RangeFilter(widget=CustomRangeWidget(attrs={'type': 'number', 'step': 1},
+                                                 from_attrs={'placeholder': 'Views from'},
+                                                 to_attrs={'placeholder': 'Views to'}))
     category = AllValuesMultipleFilter()
     shadowhidden = AllValuesFilter(empty_label='Shadowhidden')
 
