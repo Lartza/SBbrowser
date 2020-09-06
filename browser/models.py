@@ -53,7 +53,7 @@ class Sponsortime(models.Model):
     timesubmitted = models.BigIntegerField(verbose_name='Submitted')
     views = models.BigIntegerField()
     category = models.TextField()
-    shadowhidden = models.BigIntegerField(verbose_name='Hidden')
+    shadowhidden = models.BigIntegerField(verbose_name='Shadowhidden')
 
     class Meta:
         managed = False

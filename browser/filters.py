@@ -1,61 +1,43 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from django_filters import FilterSet, CharFilter, NumberFilter, AllValuesFilter, AllValuesMultipleFilter
+from django_filters import FilterSet, CharFilter, AllValuesFilter, AllValuesMultipleFilter, RangeFilter
+from django_filters.widgets import RangeWidget
 
 from .models import Sponsortime
 
-
-class SponsortimeFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Shadowhidden')
-    username = CharFilter(field_name='user__username', label='Username')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
-
-
-class VideoFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
-    username = CharFilter(field_name='user__username', label='Username')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
-
-
-class UsernameFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
-    category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
-    user = CharFilter()
-
-    class Meta:
-        model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
+FIELDS = ['videoid', 'votes', 'views', 'category', 'shadowhidden', 'uuid', 'username', 'user']
 
 
 class UserIDFilter(FilterSet):
-    votes__gt = NumberFilter(field_name='votes', lookup_expr='gt')
-    votes__lt = NumberFilter(field_name='votes', lookup_expr='lt')
-    views__gt = NumberFilter(field_name='views', lookup_expr='gt')
-    views__lt = NumberFilter(field_name='views', lookup_expr='lt')
+    votes = RangeFilter(widget=RangeWidget(attrs={'type': 'number', 'step': 1}))
+    views = RangeFilter(widget=RangeWidget(attrs={'type': 'number', 'step': 1}))
     category = AllValuesMultipleFilter()
-    hidden = AllValuesFilter(field_name='shadowhidden', empty_label='Hidden')
+    shadowhidden = AllValuesFilter(empty_label='Shadowhidden')
 
     class Meta:
         model = Sponsortime
-        fields = ['videoid', 'votes__gt', 'votes__lt', 'views__gt', 'views__lt', 'category', 'hidden', 'uuid']
+        fields = FIELDS
+        exclude = ['username', 'user']
+
+
+class UsernameFilter(UserIDFilter):
+    user = CharFilter()
+
+    class Meta:
+        model = Sponsortime
+        fields = FIELDS
+        exclude = 'username'
+
+
+class SponsortimeFilter(UsernameFilter):
+    username = CharFilter(field_name='user__username', label='Username')
+
+    class Meta:
+        model = Sponsortime
+        fields = FIELDS
+
+
+class VideoFilter(SponsortimeFilter):
+    class Meta:
+        model = Sponsortime
+        fields = FIELDS
+        exclude = 'videoid'
