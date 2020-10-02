@@ -19,4 +19,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
-STATIC_ROOT = "/srv/http/sb.ltn.fi/static/"
+STATIC_ROOT = os.environ['STATIC_ROOT']

@@ -1,0 +1,21 @@
+[Unit]
+Description = SBtools daemon
+After = network.target
+
+[Service]
+PIDFile=/run/sponsorblock/sponsorblock.pid
+User=sponsorblock
+Group=sponsorblock
+RuntimeDirectory=SBtools
+WorkingDirectory=/srv/sponsorblock/SBtools
+ExecStart=/srv/sponsorblock/SBtools/venv/bin/gunicorn -b 127.0.0.1:5002 --pid /run/SBtools/sponsorblock.pid SBtools.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+Environment="DJANGO_SETTINGS_MODULE=SBtools.settings.production"
+Environment="SECRET_KEY=changeme"
+Environment="DB_PASSWORD=changeme"
+Environment="STATIC_ROOT=/srv/http/sbtools/static/"
+
+[Install]
+WantedBy=multi-user.target
