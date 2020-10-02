@@ -29,7 +29,7 @@ Installing before running could look like the following
 [sponsorblock]$ python -m venv /srv/sponsorblock/SBtools/venv
 [sponsorblock]$ /srv/sponsorblock/SBtools/venv/bin/pip install -r /srv/sponsorblock/SBtools/requirements.txt
 [sponsorblock]$ /srv/sponsorblock/SBtools/venv/bin/pip install gunicorn
-[sponsorblock]$ DB_PASSWORD='changeme' SECRET_KEY='changeme' 'STATIC_ROOT=/srv/http/sbtools/static/' DJANGO_SETTINGS_MODULE='SBtools.settings.production' /srv/sponsorblock/SBtools/venv/bin/python /srv/sponsorblock/SBtools/manage.py collectstatic --noinput
+[sponsorblock]$ DB_PASSWORD='changeme' SECRET_KEY='changeme' STATIC_ROOT='/srv/http/sbtools/static/' DJANGO_SETTINGS_MODULE='SBtools.settings.production' /srv/sponsorblock/SBtools/venv/bin/python /srv/sponsorblock/SBtools/manage.py collectstatic --noinput
 ```
 
 The DB_PASSWORD, SECRET_KEY and STATIC_ROOT variables are also present in files under docs/ and should be modified as needed.  
