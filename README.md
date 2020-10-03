@@ -6,6 +6,11 @@ There is a publicly hosted instance of this service at https://sb.ltn.fi/
 
 ## Installation & Usage
 
+To install the requirements on Linux, `psycopg2` needs to be compiled. pip does this automatically if build requirements are available. https://www.psycopg.org/docs/install.html#build-prerequisites
+
+An alternative to building is to use `psycopg2-binary`. You can edit requirements.txt or install it manually if you can't or don't want to build.   
+The binary version is not recommended for production by psycopg2 developers and could in certain situations lead to problems, which is why we default to building. https://www.psycopg.org/docs/install.html#psycopg-vs-psycopg-binary
+
 ### Development
 For development you can clone the repo, install requirements.txt (in a venv preferably) and run the Django development server with `(venv) python manage.py runserver`.
 
@@ -29,7 +34,7 @@ Installing before running could look like the following
 [sponsorblock]$ python -m venv /srv/sponsorblock/SBtools/venv
 [sponsorblock]$ /srv/sponsorblock/SBtools/venv/bin/pip install -r /srv/sponsorblock/SBtools/requirements.txt
 [sponsorblock]$ /srv/sponsorblock/SBtools/venv/bin/pip install gunicorn
-[sponsorblock]$ DB_PASSWORD='changeme' SECRET_KEY='changeme' 'STATIC_ROOT=/srv/http/sbtools/static/' DJANGO_SETTINGS_MODULE='SBtools.settings.production' /srv/sponsorblock/SBtools/venv/bin/python /srv/sponsorblock/SBtools/manage.py collectstatic --noinput
+[sponsorblock]$ DB_PASSWORD='changeme' SECRET_KEY='changeme' STATIC_ROOT='/srv/http/sbtools/static/' DJANGO_SETTINGS_MODULE='SBtools.settings.production' /srv/sponsorblock/SBtools/venv/bin/python /srv/sponsorblock/SBtools/manage.py collectstatic --noinput
 ```
 
 The DB_PASSWORD, SECRET_KEY and STATIC_ROOT variables are also present in files under docs/ and should be modified as needed.  
