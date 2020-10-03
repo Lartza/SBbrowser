@@ -1,11 +1,11 @@
 load database
      from 'database.db'
      into pgsql://sponsorblock:CHANGEME@localhost/sponsorblock
-     SET search_path to 'sponsorblock'
+     SET search_path to 'sbtmp'
 
 with include drop, create tables, create indexes, reset sequences
 
-  set work_mem to '128MB', maintenance_work_mem to '1024 MB', search_path to 'sponsorblock'
+  set work_mem to '128MB', maintenance_work_mem to '1024 MB', search_path to 'sbtmp'
 
   before load do
-  $$ create schema if not exists sponsorblock; $$;
+  $$ create schema if not exists sbtmp; $$;
