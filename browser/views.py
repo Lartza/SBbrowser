@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 from dateutil.parser import isoparse
 import timeago
-import pytz
 from typing import Dict, Any
 
 from django_filters.views import FilterView
@@ -14,7 +13,7 @@ from .filters import *
 
 def updated() -> str:
     date = isoparse(Config.objects.get(key='updated').value)
-    now = datetime.datetime.now(pytz.utc)
+    now = datetime.datetime.now()
     return f'{date.strftime("%Y-%m-%d %H:%M:%S")} ({timeago.format(date, now)})'
 
 
