@@ -13,7 +13,9 @@ class SponsortimeTable(tables.Table):
                                    '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
                                    '<a href="/userid/{{ value }}/">🔗</a>',
                                    verbose_name='UserID', accessor='user_id')
-    username = UsernameColumn(accessor='user__username')
+    username = tables.TemplateColumn('<textarea class="form-control" name="Username" readonly>{{ value }}</textarea>'
+                                     '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
+                                     '<a href="/username/{{ value }}/">🔗</a>', accessor='user__username')
     length = LengthColumn()
 
     class Meta:

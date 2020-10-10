@@ -2,16 +2,7 @@
 import datetime
 import django_tables2 as tables
 
-from django.utils.html import format_html
 from django.db.models import F, QuerySet
-from django.utils.html import escape
-
-
-class UsernameColumn(tables.Column):
-    def render(self, value: str) -> str:
-        return format_html(f'<textarea class="form-control" name="Username" readonly>{escape(value)}</textarea>'
-                           f'<button onclick="copyToClipboard(\'{escape(value)}\');">✂</button>'
-                           f'<a href="/username/{escape(value)}/">🔗</a>')
 
 
 class LengthColumn(tables.Column):
