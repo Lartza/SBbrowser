@@ -7,5 +7,5 @@ urlpatterns = [
     path('', views.FilteredSponsortimeListView.as_view(), name='index'),
     path('video/<videoid>/', views.FilteredVideoListView.as_view(), name='video'),
     path('userid/<userid>/', views.FilteredUserIDListView.as_view(), name='userid'),
-    path('username/<username>/', views.FilteredUsernameListView.as_view(), name='username'),
+    path('username/<path:username>/', views.FilteredUsernameListView.as_view(), name='username'),
 ]
