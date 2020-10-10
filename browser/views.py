@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 from dateutil.parser import isoparse
+import timeago
+import pytz
 from typing import Dict, Any
 
 from django_filters.views import FilterView
@@ -11,7 +13,9 @@ from .filters import *
 
 
 def updated() -> str:
-    return isoparse(Config.objects.get(key='updated').value).strftime('%Y-%m-%d %H:%M:%S')
+    date = isoparse(Config.objects.get(key='updated').value)
+    now = datetime.datetime.now(pytz.utc)
+    return f'{date.strftime("%Y-%m-%d %H:%M:%S")} ({timeago.format(date, now)})'
 
 
 class FilteredSponsortimeListView(SingleTableMixin, FilterView):
