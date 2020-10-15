@@ -6,7 +6,7 @@ from typing import Dict, Any
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
-from .models import Config, Username
+from .models import Config, Username, Nosegment
 from .tables import *
 from .filters import *
 
@@ -43,6 +43,11 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context['videoid'] = self.videoid
         context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
         context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
+        nosegments = list(Nosegment.objects.filter(videoid=self.videoid).only('category').values_list('category', flat=True))
+        if nosegments:
+            context['nosegments'] = ', '.join(nosegments)
+        else:
+            context['nosegments'] = '—'
         context['updated'] = updated()
         return context
 
