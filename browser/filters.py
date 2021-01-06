@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from django_filters import FilterSet, CharFilter, AllValuesFilter, AllValuesMultipleFilter, RangeFilter
+from django_filters import FilterSet, CharFilter, ChoiceFilter, MultipleChoiceFilter, RangeFilter
 from django_filters.widgets import RangeWidget
 
 from .models import Sponsortime
@@ -24,8 +24,12 @@ class UserIDFilter(FilterSet):
     views = RangeFilter(widget=CustomRangeWidget(attrs={'type': 'number', 'step': 1},
                                                  from_attrs={'placeholder': 'Views from'},
                                                  to_attrs={'placeholder': 'Views to'}))
-    category = AllValuesMultipleFilter()
-    shadowhidden = AllValuesFilter(empty_label='Shadowhidden')
+    category = MultipleChoiceFilter(choices=(('interaction', 'Interaction'), ('intro', 'Intro'),
+                                             ('moreCategories', 'moreCategories'), ('music_offtopic', 'music_offtopic'),
+                                             ('offtopic', 'offtopic'), ('outro', 'Outro'), ('selfpromo', 'Selfpromo'),
+                                             ('sponsor', 'Sponsor'),), distinct=False)
+    category.always_filter = False
+    shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden')
 
     class Meta:
         model = Sponsortime

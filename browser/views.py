@@ -74,7 +74,11 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
         context['views'] = Sponsortime.objects.filter(user__username=self.username).aggregate(Sum('views'))['views__sum']
         context['ignored_views'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).aggregate(Sum('views'))['views__sum']
-        context['percent_ignored_views'] = round(context['ignored_views'] / context['views'] * 100, 1)
+        if context['ignored_views'] is None:
+            context['ignored_views'] = 0
+            context['percent_ignored_views'] = 0.0
+        else:
+            context['percent_ignored_views'] = round(context['ignored_views'] / context['views'] * 100, 1)
         context['updated'] = updated()
         return context
 
