@@ -5,14 +5,25 @@
 {% endblock head %}
 {% block body %}
     <div class="row">
-        <div class="col-4">
-            <ul class="list-group list-group-horizontal mt-1">
-                <li class="list-group-item">Username: {{ username }}</li>
-                <li class="list-group-item">Unique users: {{ uniques }}</li>
-                <li class="list-group-item">Submissions: {{ submissions }}</li>
-                <li class="list-group-item">Ignored: {{ ignored }}</li>
+        <div class="col-auto mt-1">
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">Username:<br>{{ username }}</li>
+                <li class="list-group-item">Unique users:<br>{{ uniques_count }}</li>
+                <li class="list-group-item">Submissions:<br>{{ submissions }}</li>
+                <li class="list-group-item">Ignored submissions:<br>{{ ignored }} ({{ percent_ignored }}%)</li>
+                <li class="list-group-item">Views:<br>{{ views }}</li>
+                <li class="list-group-item">Ignored views:<br>{{ ignored_views }} ({{ percent_ignored_views }}%)</li>
             </ul>
         </div>
+        {% if uniques_count > 1 %}
+        <div class="col-auto mt-1">
+            <ul class="list-group">
+            {% for userid in uniques %}
+                <li class="list-group-item"><a href="/userid/{{ userid }}/">{{ userid }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
     {% include "browser/table.html" %}
 {% endblock body %}

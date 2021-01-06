@@ -3,6 +3,7 @@ from dateutil.parser import isoparse
 import timeago
 from typing import Dict, Any
 
+from django.db.models import Sum
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
@@ -66,9 +67,14 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         context = super(FilteredUsernameListView, self).get_context_data(**kwargs)
 
         context['username'] = self.username
-        context['uniques'] = Username.objects.filter(username=self.username).count()
+        context['uniques'] = Username.objects.filter(username=self.username)
+        context['uniques_count'] = context['uniques'].count()
         context['submissions'] = Sponsortime.objects.filter(user__username=self.username).count()
         context['ignored'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).count()
+        context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        context['views'] = Sponsortime.objects.filter(user__username=self.username).aggregate(Sum('views'))['views__sum']
+        context['ignored_views'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).aggregate(Sum('views'))['views__sum']
+        context['percent_ignored_views'] = round(context['ignored_views'] / context['views'] * 100, 1)
         context['updated'] = updated()
         return context
 
@@ -93,6 +99,14 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
             context['username'] = '—'
         context['submissions'] = Sponsortime.objects.filter(user=self.userid).count()
         context['ignored'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).count()
+        context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        context['views'] = Sponsortime.objects.filter(user=self.userid).aggregate(Sum('views'))['views__sum']
+        context['ignored_views'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).aggregate(Sum('views'))['views__sum']
+        if context['ignored_views'] is None:
+            context['ignored_views'] = 0
+            context['percent_ignored_views'] = 0.0
+        else:
+            context['percent_ignored_views'] = round(context['ignored_views'] / context['views'] * 100, 1)
         context['updated'] = updated()
         return context
 

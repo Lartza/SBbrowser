@@ -70,7 +70,6 @@
                     </table>
                 </div>
             {% endblock table %}
-
             {% block pagination %}
                 {% if table.page and table.paginator.num_pages > 1 %}
                 <nav aria-label="Table navigation">
@@ -110,6 +109,7 @@
                 </nav>
                 {% endif %}
             {% endblock pagination %}
+            <div>Query results: {{ table.rows|length }}</div>
         </div>
     </div>
 </div>
