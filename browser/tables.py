@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from .models import Sponsortime
+from django.utils.html import format_html
+
+from .models import Sponsortime, Vipuser
 from .columns import *
 
 
@@ -11,7 +13,7 @@ class SponsortimeTable(tables.Table):
                                  '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>')
     userid = tables.TemplateColumn('<textarea class="form-control" name="UserID" readonly>{{ value }}</textarea>'
                                    '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
-                                   '<a href="/userid/{{ value }}/">🔗</a>{% load browser_extras %}{% is_vip value as vip %}{% if vip %}<span class="vip" title="This user is a VIP">👑</span>{% endif %}',
+                                   '<a href="/userid/{{ value }}/">🔗</a>',
                                    verbose_name='UserID', accessor='user_id')
     username = tables.TemplateColumn('{% if value %}'
                                      '<textarea class="form-control" name="Username" readonly>{{ value }}</textarea>'
@@ -43,10 +45,15 @@ class SponsortimeTable(tables.Table):
         return str(datetime.timedelta(seconds=value))
 
     @staticmethod
-    def render_votes(value: int) -> str:
+    def render_votes(value: int, record) -> str:
+        hidden = ''
         if value <= -2:
-            return f'{value} ❌'
-        return str(value)
+            hidden = '❌'
+        if Vipuser.objects.filter(userid=record.user_id).exists():
+            return format_html(f'{value}{hidden} <span title="This user is a VIP">👑</span>')
+        else:
+            return format_html(f"{value}{hidden}")
+
 
     @staticmethod
     def render_shadowhidden(value: int) -> str:
