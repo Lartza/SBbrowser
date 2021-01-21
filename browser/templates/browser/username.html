@@ -1,5 +1,6 @@
 {# SPDX-License-Identifier: AGPL-3.0-or-later #}
 {% extends "browser/base.html" %}
+{% load browser_extras %}
 {% block head %}
     <title>Username | SB Browser</title>
 {% endblock head %}
@@ -19,7 +20,8 @@
         <div class="col-auto mt-1">
             <ul class="list-group">
             {% for userid in uniques %}
-                <li class="list-group-item"><a href="/userid/{{ userid }}/">{{ userid }}</a></li>
+                {% is_vip userid as vip %}
+                <li class="list-group-item"><a href="/userid/{{ userid }}/">{{ userid }}{% if vip %}<span class="vip" title="This user is a VIP">👑</span>{% endif %}</a></li>
             {% endfor %}
             </ul>
         </div>

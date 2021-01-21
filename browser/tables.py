@@ -11,7 +11,7 @@ class SponsortimeTable(tables.Table):
                                  '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>')
     userid = tables.TemplateColumn('<textarea class="form-control" name="UserID" readonly>{{ value }}</textarea>'
                                    '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
-                                   '<a href="/userid/{{ value }}/">🔗</a>',
+                                   '<a href="/userid/{{ value }}/">🔗</a>{% load browser_extras %}{% is_vip value as vip %}{% if vip %}<span class="vip" title="This user is a VIP">👑</span>{% endif %}',
                                    verbose_name='UserID', accessor='user_id')
     username = tables.TemplateColumn('{% if value %}'
                                      '<textarea class="form-control" name="Username" readonly>{{ value }}</textarea>'

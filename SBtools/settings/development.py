@@ -11,6 +11,6 @@ DATABASES = {
         'NAME': 'sponsorblock',
         'USER': 'sponsorblock',
         'PASSWORD': '',
-        'HOST': '',
+        'HOST': '192.168.56.101',
     }
 }

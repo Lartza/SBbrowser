@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
-from .models import Config, Username, Nosegment
+from .models import Config, Username, Nosegment, Vipuser
 from .tables import *
 from .filters import *
 
@@ -101,6 +101,7 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
             context['username'] = Username.objects.get(userid=self.userid).username
         except Username.DoesNotExist:
             context['username'] = '—'
+        context['vip'] = Vipuser.objects.filter(userid=self.userid).exists()
         context['submissions'] = Sponsortime.objects.filter(user=self.userid).count()
         context['ignored'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).count()
         context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
