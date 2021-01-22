@@ -54,7 +54,6 @@ class SponsortimeTable(tables.Table):
         else:
             return format_html(f"{value}{hidden}")
 
-
     @staticmethod
     def render_shadowhidden(value: int) -> str:
         if value == 1:

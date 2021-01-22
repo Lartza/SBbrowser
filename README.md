@@ -14,7 +14,7 @@ The binary version is not recommended for production by psycopg2 developers and 
 ### Development
 For development you can clone the repo, install requirements.txt (in a venv preferably) and run the Django development server with `(venv) python manage.py runserver`.
 
-Database should still be migrated to PostgreSQL (eg. `pgloader database.db postgresql://sponsorblock@localhost/sponsorblock`) and modified with `INSERT INTO config VALUES ('updated', now());` or similar.  
+Database should still be migrated to PostgreSQL (e.g. `pgloader database.db postgresql://sponsorblock@localhost/sponsorblock`) and modified with `INSERT INTO config VALUES ('updated', now());` or similar.  
 Database connection details are configured in SBtools/settings/development.py  
 The SECRET_KEY doesn't need changing necessarily.
 
