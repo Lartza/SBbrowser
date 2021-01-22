@@ -71,7 +71,10 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         context['uniques_count'] = context['uniques'].count()
         context['submissions'] = Sponsortime.objects.filter(user__username=self.username).count()
         context['ignored'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).count()
-        context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        if context['submissions'] != 0:
+            context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        else:
+            context['percent_ignored'] = 0.0
         context['views'] = Sponsortime.objects.filter(user__username=self.username).aggregate(Sum('views'))['views__sum']
         context['ignored_views'] = Sponsortime.objects.filter(user__username=self.username).filter(votes__lte=-2).aggregate(Sum('views'))['views__sum']
         if context['ignored_views'] is None or context['views'] == 0:
@@ -104,7 +107,10 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         context['vip'] = Vipuser.objects.filter(userid=self.userid).exists()
         context['submissions'] = Sponsortime.objects.filter(user=self.userid).count()
         context['ignored'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).count()
-        context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        if context['submissions'] != 0:
+            context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+        else:
+            context['percent_ignored'] = 0.0
         context['views'] = Sponsortime.objects.filter(user=self.userid).aggregate(Sum('views'))['views__sum']
         context['ignored_views'] = Sponsortime.objects.filter(user=self.userid).filter(votes__lte=-2).aggregate(Sum('views'))['views__sum']
         if context['ignored_views'] is None or context['views'] == 0:
