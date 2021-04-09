@@ -9,8 +9,8 @@ class LengthColumn(tables.Column):
     def render(self, value: float) -> datetime.timedelta:
         return datetime.timedelta(seconds=value)
 
-    def order(self, qs: QuerySet, is_descending: bool) -> (QuerySet, bool):
-        qs = qs.annotate(
+    def order(self, queryset: QuerySet, is_descending: bool) -> (QuerySet, bool):
+        queryset = queryset.annotate(
             length=F("endtime") - F("starttime")
         ).order_by(("-" if is_descending else "") + "length")
-        return qs, True
+        return queryset, True

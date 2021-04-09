@@ -1,15 +1,17 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-from dateutil.parser import isoparse
-import timeago
+import datetime
 from typing import Dict, Any
 
-from django.db.models import Sum
+from dateutil.parser import isoparse
+import timeago
+
+from django.db.models import Sum, QuerySet
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
-from .models import Config, Username, Nosegment
-from .tables import *
-from .filters import *
+from .models import Config, Username, Nosegment, Sponsortime, Vipuser
+from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
+from .filters import SponsortimeFilter, VideoFilter, UsernameFilter, UserIDFilter
 
 
 def updated() -> str:
@@ -52,6 +54,10 @@ class FilteredSponsortimeListView(SingleTableMixin, FilterView):
 
 
 class FilteredVideoListView(SingleTableMixin, FilterView):
+    def __init__(self):
+        super().__init__()
+        self.videoid = None
+
     def get_queryset(self) -> QuerySet:
         self.videoid = self.kwargs['videoid']
         return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
@@ -63,7 +69,8 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context['videoid'] = self.videoid
         context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
         context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
-        nosegments = list(Nosegment.objects.filter(videoid=self.videoid).only('category').values_list('category', flat=True))
+        nosegments = list(Nosegment.objects.filter(
+            videoid=self.videoid).only('category').values_list('category', flat=True))
         if nosegments:
             context['nosegments'] = ', '.join(nosegments)
         else:
@@ -78,6 +85,10 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
 
 class FilteredUsernameListView(SingleTableMixin, FilterView):
+    def __init__(self):
+        super().__init__()
+        self.username = None
+
     def get_queryset(self) -> QuerySet:
         self.username = self.kwargs['username']
         return Sponsortime.objects.filter(user__username=self.username).order_by('-timesubmitted')
@@ -102,6 +113,10 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
 
 
 class FilteredUserIDListView(SingleTableMixin, FilterView):
+    def __init__(self):
+        super().__init__()
+        self.userid = None
+
     def get_queryset(self) -> QuerySet:
         self.userid = self.kwargs['userid']
         return Sponsortime.objects.filter(user=self.userid).order_by('-timesubmitted')

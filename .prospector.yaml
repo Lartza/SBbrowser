@@ -1,0 +1,32 @@
+strictness: veryhigh
+
+uses:
+  - django
+
+ignore-paths:
+  - .mypy_cache
+  - migrations
+  - node_modules
+  - venv
+  - __pycache__
+  - manage.py
+
+mypy:
+  run: false
+
+bandit:
+  run: true
+
+dodgy:
+  run: false
+
+pylint:
+  enable:
+    - useless-suppression
+  options:
+    max-line-length: 120
+    max-parents: 12
+
+pep8:
+  options:
+    max-line-length: 120

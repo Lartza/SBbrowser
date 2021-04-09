@@ -1,8 +1,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+import datetime
+
 from django.utils.html import format_html
+from django.db.models import F, QuerySet
+
+import django_tables2 as tables
 
 from .models import Sponsortime, Vipuser
-from .columns import *
+from .columns import LengthColumn
 
 
 class SponsortimeTable(tables.Table):
@@ -22,7 +27,7 @@ class SponsortimeTable(tables.Table):
                                      '{% else %}—{% endif %}', accessor='user__username')
     length = LengthColumn()
 
-    class Meta:
+    class Meta: # noqa
         model = Sponsortime
         exclude = ('incorrectvotes', 'user')
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
@@ -30,7 +35,7 @@ class SponsortimeTable(tables.Table):
 
     @staticmethod
     def render_timesubmitted(value: float) -> str:
-        return datetime.datetime.utcfromtimestamp(value/1000.).strftime('%Y-%m-%d %H:%M:%S')
+        return datetime.datetime.utcfromtimestamp(value / 1000.).strftime('%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def render_starttime(value: float) -> str:
@@ -51,8 +56,7 @@ class SponsortimeTable(tables.Table):
             hidden = '❌'
         if Vipuser.objects.filter(userid=record.user_id).exists():
             return format_html(f'{value}{hidden} <span title="This user is a VIP">👑</span>')
-        else:
-            return format_html(f"{value}{hidden}")
+        return format_html(f"{value}{hidden}")
 
     @staticmethod
     def render_shadowhidden(value: int) -> str:
@@ -61,30 +65,30 @@ class SponsortimeTable(tables.Table):
         return '—'
 
     @staticmethod
-    def order_username(qs: QuerySet, is_descending: bool) -> (QuerySet, bool):
+    def order_username(queryset: QuerySet, is_descending: bool) -> (QuerySet, bool):
         if is_descending:
-            qs = qs.select_related('user').order_by(F('user__username').desc(nulls_last=True))
+            queryset = queryset.select_related('user').order_by(F('user__username').desc(nulls_last=True))
         else:
-            qs = qs.select_related('user').order_by(F('user__username').asc(nulls_last=True))
-        return qs, True
+            queryset = queryset.select_related('user').order_by(F('user__username').asc(nulls_last=True))
+        return queryset, True
 
 
 class VideoTable(SponsortimeTable):
-    class Meta:
+    class Meta: # noqa
         exclude = ('videoid',)
         sequence = ('timesubmitted', 'starttime', 'endtime', 'length', 'votes', 'views', 'category', 'shadowhidden',
                     'uuid', 'username')
 
 
 class UsernameTable(SponsortimeTable):
-    class Meta:
+    class Meta: # noqa
         exclude = ('username',)
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
                     'shadowhidden', 'uuid')
 
 
 class UserIDTable(SponsortimeTable):
-    class Meta:
+    class Meta: # noqa
         exclude = ('username', 'userid')
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
                     'shadowhidden')
