@@ -29,7 +29,7 @@ class SponsortimeTable(tables.Table):
 
     class Meta: # noqa
         model = Sponsortime
-        exclude = ('incorrectvotes', 'user')
+        exclude = ('incorrectvotes', 'user', 'videoduration', 'locked', 'service', 'hidden', 'hashedvideoid')
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
                     'shadowhidden', 'uuid', 'username')
 

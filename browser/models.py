@@ -12,53 +12,57 @@ class Config(models.Model):
 
 
 class Username(models.Model):
-    userid = models.TextField(primary_key=True)
-    username = models.TextField(blank=True, null=True, verbose_name='Username')
+    userid = models.TextField(primary_key=True, db_column='userID')
+    username = models.TextField(blank=True, null=True, verbose_name='Username', db_column='userName')
 
     class Meta:
         managed = False
-        db_table = 'usernames'
+        db_table = 'userNames'
 
     def __str__(self) -> str:
         return self.userid
 
 
 class Vipuser(models.Model):
-    userid = models.TextField(primary_key=True)
+    userid = models.TextField(primary_key=True, db_column='userID')
 
     class Meta:
         managed = False
-        db_table = 'vipusers'
+        db_table = 'vipUsers'
 
 
 class Nosegment(models.Model):
-    videoid = models.TextField(primary_key=True)
-    userid = models.TextField(blank=True, null=True)
+    videoid = models.TextField(primary_key=True, db_column='videoID')
+    userid = models.TextField(blank=True, null=True, db_column='userID')
     category = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'nosegments'
+        db_table = 'noSegments'
 
 
 class Sponsortime(models.Model):
-    videoid = models.TextField(blank=True, null=True, verbose_name='Video ID')
-    starttime = models.FloatField(blank=True, null=True, verbose_name='Start')
-    endtime = models.FloatField(blank=True, null=True, verbose_name='End')
-    votes = models.BigIntegerField(blank=True, null=True)
-#    incorrectvotes = models.BigIntegerField(blank=True, null=True)
-    uuid = models.TextField(primary_key=True, verbose_name='UUID')
+    videoid = models.TextField(blank=True, null=True, verbose_name='Video ID', db_column='videoID')
+    starttime = models.FloatField(blank=True, null=True, verbose_name='Start', db_column='startTime')
+    endtime = models.FloatField(blank=True, null=True, verbose_name='End', db_column='endTime')
+    votes = models.IntegerField(blank=True, null=True)
+    locked = models.IntegerField(blank=True, null=True)
+    incorrectvotes = models.IntegerField(blank=True, null=True, db_column='incorrectVotes')
+    uuid = models.TextField(primary_key=True, verbose_name='UUID', db_column='UUID')
     user = models.ForeignKey(Username, blank=True, null=True, on_delete=models.PROTECT, db_constraint=False,
-                             db_column='userid', verbose_name='UserID')
-    timesubmitted = models.BigIntegerField(blank=True, null=True, verbose_name='Submitted')
-    views = models.BigIntegerField(blank=True, null=True)
+                             db_column='userID', verbose_name='UserID')
+    timesubmitted = models.BigIntegerField(blank=True, null=True, verbose_name='Submitted', db_column='timeSubmitted')
+    views = models.IntegerField(blank=True, null=True)
     category = models.TextField(blank=True, null=True)
-    shadowhidden = models.BigIntegerField(blank=True, null=True, verbose_name='Shadowhidden')
-#    hashedvideoid = models.TextField(blank=True, null=True)
+    service = models.TextField(blank=True, null=True)
+    videoduration = models.FloatField(db_column='videoDuration')
+    hidden = models.IntegerField(blank=True, null=True)
+    shadowhidden = models.IntegerField(blank=True, null=True, verbose_name='Shadowhidden', db_column='shadowHidden')
+    hashedvideoid = models.TextField(blank=True, null=True, db_column='hashedVideoID')
 
     class Meta:
         managed = False
-        db_table = 'sponsortimes'
+        db_table = 'sponsorTimes'
 
     def ignored(self) -> int:
         return self.votes <= -2
@@ -67,10 +71,21 @@ class Sponsortime(models.Model):
         return self.endtime - self.starttime
 
 # class Categoryvote(models.Model):
-#    uuid = models.TextField(blank=True, null=True)
+#    uuid = models.TextField(primary_key=True, db_column='UUID')
 #    category = models.TextField(blank=True, null=True)
-#    votes = models.BigIntegerField(blank=True, null=True)
+#    votes = models.IntegerField(blank=True, null=True)
 #
 #    class Meta:
 #        managed = False
-#        db_table = 'categoryvotes'
+#        db_table = 'categoryVotes'
+
+
+# class Warnings(models.Model):
+#    userid = models.TextField(db_column='userID')  # Field name made lowercase.
+#    issuetime = models.BigIntegerField(db_column='issueTime')  # Field name made lowercase.
+#    issueruserid = models.TextField(db_column='issuerUserID')  # Field name made lowercase.
+#    enabled = models.IntegerField()
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'warnings'

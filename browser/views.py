@@ -16,7 +16,7 @@ from .filters import SponsortimeFilter, VideoFilter, UsernameFilter, UserIDFilte
 
 def updated() -> str:
     date = isoparse(Config.objects.get(key='updated').value)
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(tz=datetime.timezone.utc)
     return f'{date.strftime("%Y-%m-%d %H:%M:%S")} ({timeago.format(date, now)})'
 
 
