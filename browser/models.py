@@ -31,14 +31,14 @@ class Vipuser(models.Model):
         db_table = 'vipUsers'
 
 
-class Nosegment(models.Model):
+class Lockcategory(models.Model):
     videoid = models.TextField(primary_key=True, db_column='videoID')
     userid = models.TextField(blank=True, null=True, db_column='userID')
     category = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'noSegments'
+        db_table = 'lockCategories'
 
 
 class Sponsortime(models.Model):
