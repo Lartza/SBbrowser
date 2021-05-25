@@ -47,7 +47,7 @@ class UsernameFilter(UserIDFilter):
 
 
 class SponsortimeFilter(UsernameFilter):
-    username = CharFilter(field_name='user__username', label='Username')
+    username = CharFilter(field_name='user__username', label='Username', lookup_expr='icontains')
 
     class Meta:
         model = Sponsortime
