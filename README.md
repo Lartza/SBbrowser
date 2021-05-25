@@ -40,8 +40,6 @@ Installing before running could look like the following
 The DB_PASSWORD, SECRET_KEY and STATIC_ROOT variables are also present in files under docs/ and should be modified as needed.  
 SECRET_KEY should be a large random value and kept secret. You could generate one on https://djecrety.ir/
 
-After installation the files under docs/ should help with migrating the database to PostgreSQL and running the service.
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
