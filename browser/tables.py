@@ -29,9 +29,9 @@ class SponsortimeTable(tables.Table):
 
     class Meta: # noqa
         model = Sponsortime
-        exclude = ('incorrectvotes', 'user', 'videoduration', 'locked', 'service', 'hidden', 'hashedvideoid')
+        exclude = ('incorrectvotes', 'user', 'videoduration', 'locked', 'service', 'hashedvideoid')
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
-                    'shadowhidden', 'uuid', 'username')
+                    'hidden', 'shadowhidden', 'uuid', 'username')
 
     @staticmethod
     def render_timesubmitted(value: float) -> str:
@@ -59,9 +59,15 @@ class SponsortimeTable(tables.Table):
         return format_html(f"{value}{hidden}")
 
     @staticmethod
+    def render_hidden(value: int) -> str:
+        if value == 1:
+            return format_html('<span title="This segment is hidden due to video duration change.">❌</span>')
+        return '—'
+
+    @staticmethod
     def render_shadowhidden(value: int) -> str:
         if value == 1:
-            return format_html('<span title="This segment is not sent to users">❌</span>')
+            return format_html('<span title="This segment has been shadowhidden.">❌</span>')
         return '—'
 
     @staticmethod

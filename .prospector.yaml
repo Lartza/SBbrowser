@@ -1,3 +1,4 @@
+output-format: pylint
 strictness: veryhigh
 
 uses:
