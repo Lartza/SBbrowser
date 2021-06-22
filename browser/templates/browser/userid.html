@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col">
             <ul class="list-group list-group-horizontal mt-1">
-                <li class="list-group-item">Username:<br><a href="/username/{{ username }}/">{{ username }}</a>{% if vip %}<br><span title="This user is a VIP">👑</span>{% endif %}</li>
+                <li class="list-group-item">Username:<br><a class="pr-1" href="/username/{{ username }}/">{{ username }}</a>{% if vip %}<span title="This user is a VIP" class="badge bg-secondary">👑</span>{% endif %}</li>
                 <li class="list-group-item">Submissions:<br>{{ submissions }}</li>
                 <li class="list-group-item">Ignored submissions:<br>{{ ignored }} ({{ percent_ignored }}%)</li>
                 <li class="list-group-item">Views:<br>{{ views }}</li>
