@@ -16,7 +16,6 @@
                 <li class="list-group-item">Ignored views:<br>{{ ignored_views }} ({{ percent_ignored_views }}%)</li>
             </ul>
         </div>
-        {% if uniques_count > 1 %}
         <div class="col-auto mt-1">
             <ul class="list-group">
             {% for userid in uniques %}
@@ -25,7 +24,6 @@
             {% endfor %}
             </ul>
         </div>
-        {% endif %}
     </div>
     {% include "browser/table.html" %}
 {% endblock body %}
