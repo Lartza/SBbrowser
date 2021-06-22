@@ -52,11 +52,14 @@ class SponsortimeTable(tables.Table):
     @staticmethod
     def render_votes(value: int, record) -> str:
         hidden = ''
+        locked = ''
+        if record.locked == 1:
+            locked = '<span title="This segment is locked by a VIP">🔒</span>'
         if value <= -2:
             hidden = '<span title="This segment is not sent to users">❌</span>'
         if Vipuser.objects.filter(userid=record.user_id).exists():
-            return format_html(f'{value}{hidden} <span title="This user is a VIP">👑</span>')
-        return format_html(f"{value}{hidden}")
+            return format_html(f'{value}{hidden}{locked}<span title="This user is a VIP">👑</span>')
+        return format_html(f'{value}{hidden}{locked}')
 
     @staticmethod
     def render_hidden(value: int) -> str:

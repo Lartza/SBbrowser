@@ -26,8 +26,8 @@ class UserIDFilter(FilterSet):
                                                  to_attrs={'placeholder': 'Views to'}))
     category = MultipleChoiceFilter(choices=(('interaction', 'Interaction'), ('intro', 'Intro'),
                                              ('moreCategories', 'moreCategories'), ('music_offtopic', 'music_offtopic'),
-                                             ('offtopic', 'offtopic'), ('outro', 'Outro'), ('selfpromo', 'Selfpromo'),
-                                             ('sponsor', 'Sponsor'),), distinct=False)
+                                             ('offtopic', 'offtopic'), ('outro', 'Outro'), ('preview', 'Preview'),
+                                             ('selfpromo', 'Selfpromo'), ('sponsor', 'Sponsor'),), distinct=False)
     category.always_filter = False
     shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden')
 
