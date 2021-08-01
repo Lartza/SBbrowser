@@ -3,5 +3,5 @@ django-bootstrap4==3.0.1
 django-tables2==2.4.0
 django-filter==2.4.0
 psycopg2==2.9.1
-python-dateutil==2.8.1
+python-dateutil==2.8.2
 timeago==1.0.15

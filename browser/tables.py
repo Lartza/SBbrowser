@@ -25,7 +25,9 @@ class SponsortimeTable(tables.Table):
                                      '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
                                      '<a href="/username/{{ value }}/">🔗</a>'
                                      '{% else %}—{% endif %}', accessor='user__username')
-    length = LengthColumn()
+    length = LengthColumn(initial_sort_descending=True)
+    votes = tables.Column(initial_sort_descending=True)
+    views = tables.Column(initial_sort_descending=True)
 
     class Meta: # noqa
         model = Sponsortime
