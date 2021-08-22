@@ -24,8 +24,8 @@ class UserIDFilter(FilterSet):
     views = RangeFilter(widget=CustomRangeWidget(attrs={'type': 'number', 'step': 1},
                                                  from_attrs={'placeholder': 'Views from'},
                                                  to_attrs={'placeholder': 'Views to'}))
-    category = MultipleChoiceFilter(choices=(('interaction', 'Interaction'), ('intro', 'Intro'),
-                                             ('moreCategories', 'moreCategories'), ('music_offtopic', 'music_offtopic'),
+    category = MultipleChoiceFilter(choices=(('poi_highlight', 'Highlight'), ('interaction', 'Interaction'),
+                                             ('intro', 'Intro'), ('music_offtopic', 'music_offtopic'),
                                              ('offtopic', 'offtopic'), ('outro', 'Outro'), ('preview', 'Preview'),
                                              ('selfpromo', 'Selfpromo'), ('sponsor', 'Sponsor'),), distinct=False)
     category.always_filter = False
