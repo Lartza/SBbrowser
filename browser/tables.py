@@ -23,7 +23,7 @@ class SponsortimeTable(tables.Table):
     username = tables.TemplateColumn('{% if value %}'
                                      '<textarea class="form-control" name="Username" readonly>{{ value }}</textarea>'
                                      '<button onclick="copyToClipboard(\'{{ value }}\');">✂</button>'
-                                     '<a href="/username/{{ value }}/">🔗</a>'
+                                     '<a href="/username/{{ value|urlencode }}/">🔗</a>'
                                      '{% else %}—{% endif %}', accessor='user__username')
     length = LengthColumn(initial_sort_descending=True)
     votes = tables.Column(initial_sort_descending=True)
