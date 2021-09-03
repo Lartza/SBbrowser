@@ -56,6 +56,7 @@ class Sponsortime(models.Model):
     category = models.TextField(blank=True, null=True)
     service = models.TextField(blank=True, null=True)
     videoduration = models.FloatField(db_column='videoDuration')
+    actiontype = models.TextField(db_column='actionType')
     hidden = models.IntegerField(blank=True, null=True)
     shadowhidden = models.IntegerField(blank=True, null=True, verbose_name='Shadowhidden', db_column='shadowHidden')
     hashedvideoid = models.TextField(blank=True, null=True, db_column='hashedVideoID')

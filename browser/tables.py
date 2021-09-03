@@ -33,7 +33,7 @@ class SponsortimeTable(tables.Table):
         model = Sponsortime
         exclude = ('incorrectvotes', 'user', 'videoduration', 'locked', 'service', 'hashedvideoid')
         sequence = ('timesubmitted', 'videoid', 'starttime', 'endtime', 'length', 'votes', 'views', 'category',
-                    'hidden', 'shadowhidden', 'uuid', 'username')
+                    'actiontype', 'hidden', 'shadowhidden', 'uuid', 'username')
 
     @staticmethod
     def render_timesubmitted(value: float) -> str:
@@ -62,6 +62,14 @@ class SponsortimeTable(tables.Table):
         if Vipuser.objects.filter(userid=record.user_id).exists():
             return format_html(f'{value}{hidden}{locked}<span title="This user is a VIP">👑</span>')
         return format_html(f'{value}{hidden}{locked}')
+
+    @staticmethod
+    def render_actiontype(value: str) -> str:
+        if value == 'skip':
+            return format_html('<span title="Skip">⏭️</span>')
+        if value == 'mute':
+            return format_html('<span title="Mute">🔇</span>')
+        return '—'
 
     @staticmethod
     def render_hidden(value: int) -> str:
