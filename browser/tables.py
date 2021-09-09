@@ -64,6 +64,12 @@ class SponsortimeTable(tables.Table):
         return format_html(f'{value}{hidden}{locked}')
 
     @staticmethod
+    def render_views(value: int, record) -> str:
+        if record.votes <= -2:
+            return 0
+        return value
+
+    @staticmethod
     def render_actiontype(value: str) -> str:
         if value == 'skip':
             return format_html('<span title="Skip">⏭️</span>')
