@@ -5,7 +5,7 @@ from typing import Dict, Any
 from dateutil.parser import isoparse
 import timeago
 
-from django.db.models import Sum, QuerySet
+from django.db.models import Sum, QuerySet, Q
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 
@@ -23,6 +23,8 @@ def updated() -> str:
 def populate_context(context, filter_args) -> dict:
     context['submissions'] = Sponsortime.objects.filter(**filter_args).count()
     context['ignored'] = Sponsortime.objects.filter(**filter_args).filter(votes__lte=-2).count()
+    context['hidden'] = Sponsortime.objects.filter(**filter_args).filter(votes__gte=-1).filter(
+        Q(hidden=1) | Q(shadowhidden=1)).count()
     if context['submissions'] != 0:
         context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
     else:
@@ -69,6 +71,8 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context['videoid'] = self.videoid
         context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
         context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
+        context['hidden'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__gte=-1).filter(
+            Q(hidden=1) | Q(shadowhidden=1)).count()
         lockcategories = list(Lockcategory.objects.filter(
             videoid=self.videoid).only('category').values_list('category', flat=True))
         if lockcategories:
