@@ -76,11 +76,11 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
         context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = '—'
         lockcategories = Lockcategory.objects.filter(videoid=self.videoid)
-        lockcategories_skip = list(lockcategories.filter(category='skip').only('category')
+        lockcategories_skip = list(lockcategories.filter(actionType='skip').only('category')
                                    .values_list('category', flat=True))
-        lockcategories_mute = list(lockcategories.filter(category='mute').only('category')
+        lockcategories_mute = list(lockcategories.filter(actionType='mute').only('category')
                                    .values_list('category', flat=True))
-        lockcategories_full = list(lockcategories.filter(category='full').only('category')
+        lockcategories_full = list(lockcategories.filter(actionType='full').only('category')
                                    .values_list('category', flat=True))
         if lockcategories_skip:
             context['lockcategories_skip'] = ', '.join(lockcategories_skip)
