@@ -49,7 +49,7 @@ class FilteredSponsortimeListView(SingleTableMixin, FilterView):
     filterset_class = SponsortimeFilter
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
-        context = super(FilteredSponsortimeListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context['updated'] = updated()
         return context
@@ -66,7 +66,7 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
 
-        context = super(FilteredVideoListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         context['videoid'] = self.videoid
         context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
@@ -98,7 +98,7 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         return Sponsortime.objects.filter(user__username=self.username).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
-        context = super(FilteredUsernameListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         filter_args = {'user__username': self.username}
 
@@ -126,7 +126,7 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         return Sponsortime.objects.filter(user=self.userid).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
-        context = super(FilteredUserIDListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         filter_args = {'user': self.userid}
 
