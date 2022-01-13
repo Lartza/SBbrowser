@@ -10,3 +10,7 @@ function resetForm($form) {
     $form.find('input:radio, input:checkbox')
          .removeAttr('checked').removeAttr('selected');
 }
+
+document.querySelector("#darkmode").onclick = function(e){
+    darkmode.toggleDarkMode();
+}
