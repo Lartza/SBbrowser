@@ -6,7 +6,7 @@
 {% block body %}
     <div class="row">
         <div class="col-4">
-            <div class="embed-responsive embed-responsive-16by9">
+            <div class="ratio ratio-16x9">
               <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ videoid }}?rel=0" allowfullscreen></iframe>
             </div>
         </div>
@@ -14,7 +14,9 @@
             <ul class="list-group mt-1">
                 <li class="list-group-item">Submissions: {{ submissions }}</li>
                 <li class="list-group-item">Ignored: {{ ignored }}</li>
-                <li class="list-group-item">Locked categories: {{ lockcategories }}</li>
+                <li class="list-group-item">Locked skips: {{ lockcategories_skip }}</li>
+                <li class="list-group-item">Locked mutes: {{ lockcategories_mute }}</li>
+                <li class="list-group-item">Locked full: {{ lockcategories_full }}</li>
                 <li class="list-group-item"><a href="https://youtu.be/{{ videoid }}">YouTube 🔗</a></li>
             </ul>
         </div>

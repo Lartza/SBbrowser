@@ -73,12 +73,22 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
         context['hidden'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__gte=-1).filter(
             Q(hidden=1) | Q(shadowhidden=1)).count()
-        lockcategories = list(Lockcategory.objects.filter(
-            videoid=self.videoid).only('category').values_list('category', flat=True))
-        if lockcategories:
-            context['lockcategories'] = ', '.join(lockcategories)
-        else:
-            context['lockcategories'] = '—'
+
+        context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = '—'
+        lockcategories = Lockcategory.objects.filter(videoid=self.videoid)
+        lockcategories_skip = list(lockcategories.filter(category='skip').only('category')
+                                   .values_list('category', flat=True))
+        lockcategories_mute = list(lockcategories.filter(category='mute').only('category')
+                                   .values_list('category', flat=True))
+        lockcategories_full = list(lockcategories.filter(category='full').only('category')
+                                   .values_list('category', flat=True))
+        if lockcategories_skip:
+            context['lockcategories_skip'] = ', '.join(lockcategories_skip)
+        if lockcategories_mute:
+            context['lockcategories_mute'] = ', '.join(lockcategories_mute)
+        if lockcategories_full:
+            context['lockcategories_full'] = ', '.join(lockcategories_full)
+
         context['updated'] = updated()
         return context
 
