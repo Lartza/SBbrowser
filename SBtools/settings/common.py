@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'browser.apps.BrowserConfig',
     'django_tables2',
     'django_filters',
-    'bootstrap4',
+    'django_bootstrap5',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
