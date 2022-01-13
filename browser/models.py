@@ -34,6 +34,7 @@ class Vipuser(models.Model):
 class Lockcategory(models.Model):
     videoid = models.TextField(primary_key=True, db_column='videoID')
     userid = models.TextField(blank=True, null=True, db_column='userID')
+    actiontype = models.TextField(blank=True, null=False, db_column='actionType')
     category = models.TextField(blank=True, null=True)
 
     class Meta:
