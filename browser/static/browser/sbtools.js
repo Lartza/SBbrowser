@@ -4,13 +4,22 @@ $('form').submit(function() {
     });
 });
 
-function resetForm($form) {
+$('.formreset').click(resetForm);
+function resetForm() {
+    const $form = $('#filterForm')
     $form.find('input:text, input:password, input:file, select, textarea').val('');
     $form.find(':input[type=number]').val('');
     $form.find('input:radio, input:checkbox')
          .removeAttr('checked').removeAttr('selected');
 }
 
-document.querySelector("#darkmode").onclick = function(e){
+document.querySelector("#darkmode").onclick = function(){
     darkmode.toggleDarkMode();
+}
+
+const elements = document.querySelectorAll('.clip')
+for (let i = 0, element; element = elements[i]; i++) {
+    element.addEventListener('click', function() {
+        navigator.clipboard.writeText(element.dataset.value);
+    });
 }

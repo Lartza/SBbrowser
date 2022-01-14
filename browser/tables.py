@@ -12,17 +12,17 @@ from .columns import LengthColumn
 
 class SponsortimeTable(tables.Table):
     videoid = tables.TemplateColumn('<a href="/video/{{ value }}/">{{ value }}</a>'
-                                    '<button onclick="navigator.clipboard.writeText(\'{{ value }}\');">✂</button>'
+                                    '<button class="clip" data-value="{{ value }}">✂</button>'
                                     '<a href="https://youtu.be/{{ value }}">YT</a>')
     uuid = tables.TemplateColumn('<textarea class="form-control" name="UUID" readonly>{{ value }}</textarea>'
-                                 '<button onclick="navigator.clipboard.writeText(\'{{ value }}\');">✂</button>')
+                                 '<button class="clip" data-value="{{ value }}">✂</button>')
     userid = tables.TemplateColumn('<textarea class="form-control" name="UserID" readonly>{{ value }}</textarea>'
-                                   '<button onclick="navigator.clipboard.writeText(\'{{ value }}\');">✂</button>'
+                                   '<button class="clip" data-value="{{ value }}">✂</button>'
                                    '<a href="/userid/{{ value }}/">🔗</a>',
                                    verbose_name='UserID', accessor='user_id')
     username = tables.TemplateColumn('{% if value %}'
                                      '<textarea class="form-control" name="Username" readonly>{{ value }}</textarea>'
-                                     '<button onclick="navigator.clipboard.writeText(\'{{ value }}\');">✂</button>'
+                                     '<button class="clip" data-value="{{ value }}">✂</button>'
                                      '<a href="/username/{{ value|urlencode }}/">🔗</a>'
                                      '{% else %}—{% endif %}', accessor='user__username')
     length = LengthColumn(initial_sort_descending=True)

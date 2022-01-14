@@ -1,0 +1,36 @@
+a {
+    text-decoration: none;
+}
+
+html.dark a {
+    color: #6E8CAA;
+}
+
+html.dark .page-link {
+    color: #91A8C0;
+}
+
+html.dark .form-control {
+    border-color: #8A8A8A;
+}
+
+html.dark .bg-light {
+    background-color: #737373 !important;
+}
+
+textarea {
+    resize: horizontal;
+}
+
+table button {
+    border: none;
+    background: none;
+}
+
+nav img, .navbar-brand {
+    max-height: 40px;
+}
+
+.table-display {
+    display: table;
+}

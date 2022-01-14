@@ -7,7 +7,7 @@
     <form action="" method="get" class="row row-cols-auto mt-1" id="filterForm">
         {% bootstrap_form filter.form show_label=False %}
         <div class="d-grid gap-2 d-md-block my-auto">
-            {% bootstrap_button 'Clear' button_class='btn-secondary' button_type='button' onclick="resetForm($('#filterForm'));" %}
+            {% bootstrap_button 'Clear' button_class='btn-secondary' button_type='button' extra_classes='formreset' %}
             {% bootstrap_button 'Filter' %}
         </div>
     </form>
