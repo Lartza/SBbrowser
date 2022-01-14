@@ -22,6 +22,14 @@
             color: #91A8C0;
         }
 
+        html.dark .form-control {
+            border-color: #8A8A8A;
+        }
+
+        html.dark .bg-light {
+            background-color: #737373 !important;
+        }
+
         textarea {
             resize: horizontal;
         }
@@ -34,42 +42,36 @@
         nav img, .navbar-brand {
             max-height: 40px;
         }
+
+        .table {
+            display: table;
+        }
+
+        .table form {
+            border: 0 !important;
+        }
     </style>
     {% block head %}
     {% endblock head %}
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">
-                            <img src="{% static 'browser/logo.png' %}" alt="Logo" class="d-inline-block">
-                            SB Browser
-                        </a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                            <div class="navbar-nav">
-                                <a class="nav-link" href="/">Home</a>
-                            </div>
-                        </div>
-                        <button class="btn btn-secondary" id="darkmode" title="Dark mode toggle">Dark/Light</button>
-                    </div>
-                </nav>
-            </div>
-        </div>
+    <div class="table">
+        <nav class="navbar navbar-light bg-light ">
+            <a class="navbar-brand ms-2" href="/">
+                <img src="{% static 'browser/logo.png' %}" alt="Logo" class="d-inline-block">
+                SB Browser
+            </a>
+            <button class="btn btn-secondary me-2" id="darkmode" title="Dark mode toggle">Dark/Light</button>
+        </nav>
         {% block body %}
         {% endblock %}
-        <div class="row">
-            <div class="col">
-                Last update: {{ updated }} All times UTC
-            </div>
-            <div class="col">
-                <a href="https://github.com/Lartza/SBbrowser">SBbrowser</a> &copy; {% now 'Y' %} Lartza, licensed under AGPLv3. Uses SponsorBlock data licensed used under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> from <a href="https://sponsor.ajay.app/">https://sponsor.ajay.app/</a>.
-            </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Last update: {{ updated }} All times UTC
+        </div>
+        <div class="col">
+            <a href="https://github.com/Lartza/SBbrowser">SBbrowser</a> &copy; {% now 'Y' %} Lartza, licensed under AGPLv3. Uses SponsorBlock data licensed used under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> from <a href="https://sponsor.ajay.app/">https://sponsor.ajay.app/</a>.
         </div>
     </div>
     {% bootstrap_javascript %}
