@@ -5,8 +5,8 @@
     <title>Username | SB Browser</title>
 {% endblock head %}
 {% block body %}
-    <div class="row">
-        <div class="col-auto mt-1">
+    <div class="row mt-2">
+        <div class="col-auto">
             <ul class="list-group list-group-horizontal">
                 <li class="list-group-item">Username:<br>{{ username }}</li>
                 <li class="list-group-item">Unique users:<br>{{ uniques_count }}</li>
@@ -16,7 +16,7 @@
                 <li class="list-group-item">Ignored views:<br>{{ ignored_views }} ({{ percent_ignored_views }}%)</li>
             </ul>
         </div>
-        <div class="col-auto mt-1">
+        <div class="col-auto">
             <ul class="list-group">
             {% for userid in uniques %}
                 {% is_vip userid as vip %}

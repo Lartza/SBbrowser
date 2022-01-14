@@ -1,3 +1,7 @@
+html.dark {
+    color-scheme: dark;
+}
+
 a {
     text-decoration: none;
 }
@@ -29,8 +33,4 @@ table button {
 
 nav img, .navbar-brand {
     max-height: 40px;
-}
-
-.table-display {
-    display: table;
 }

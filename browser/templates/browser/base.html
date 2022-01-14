@@ -13,23 +13,27 @@
     {% endblock head %}
 </head>
 <body>
-    <div class="table-display">
-        <nav class="navbar navbar-light bg-light ">
-            <a class="navbar-brand ms-2" href="/">
-                <img src="{% static 'browser/logo.png' %}" alt="Logo" class="d-inline-block">
-                SB Browser
-            </a>
-            <button class="btn btn-secondary me-2" id="darkmode" title="Dark mode toggle">Dark/Light</button>
-        </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <nav class="navbar navbar-light bg-light ">
+                    <a class="navbar-brand ms-2" href="/">
+                        <img src="{% static 'browser/logo.png' %}" alt="Logo" class="d-inline-block">
+                        SB Browser
+                    </a>
+                    <button class="btn btn-secondary me-2" id="darkmode" title="Dark mode toggle">Dark/Light</button>
+                </nav>
+            </div>
+        </div>
         {% block body %}
         {% endblock %}
-    </div>
-    <div class="row">
-        <div class="col">
-            Last update: {{ updated }} All times UTC
-        </div>
-        <div class="col">
-            <a href="https://github.com/Lartza/SBbrowser">SBbrowser</a> &copy; {% now 'Y' %} Lartza, licensed under AGPLv3. Uses SponsorBlock data licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> from <a href="https://sponsor.ajay.app/">https://sponsor.ajay.app/</a>.
+        <div class="row">
+            <div class="col">
+                Last update: {{ updated }} All times UTC
+            </div>
+            <div class="col-auto">
+                <a href="https://github.com/Lartza/SBbrowser">SBbrowser</a> &copy; {% now 'Y' %} Lartza, licensed under AGPLv3. Uses SponsorBlock data licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> from <a href="https://sponsor.ajay.app/">https://sponsor.ajay.app/</a>.
+            </div>
         </div>
     </div>
     {% bootstrap_javascript %}
