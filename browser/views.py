@@ -1,23 +1,49 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 import datetime
 from typing import Dict, Any
+from urllib.parse import urlparse, parse_qs
 
 from dateutil.parser import isoparse
 import timeago
 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.db.models import Sum, QuerySet, Q
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
+from django_tables2 import SingleTableView
 
 from .models import Config, Username, Lockcategory, Sponsortime, Vipuser
 from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
-from .filters import SponsortimeFilter, VideoFilter, UsernameFilter, UserIDFilter
+from .filters import VideoFilter, UsernameFilter, UserIDFilter
+from .forms import VideoIDForm, UsernameForm, UserIDForm
 
 
 def updated() -> str:
     date = isoparse(Config.objects.get(key='updated').value)
     now = datetime.datetime.now(tz=datetime.timezone.utc)
     return f'{date.strftime("%Y-%m-%d %H:%M:%S")} ({timeago.format(date, now)})'
+
+
+def get_yt_video_id(url):
+    """Returns Video_ID extracting from the given url of Youtube"""
+
+    if url.startswith(('youtu', 'www')):
+        url = 'http://' + url
+
+    query = urlparse(url)
+
+    if query.hostname is None:
+        raise ValueError('No hostname found')
+
+    if 'youtube' in query.hostname:
+        if query.path == '/watch':
+            return parse_qs(query.query)['v'][0]
+        if query.path.startswith(('/embed/', '/v/')):
+            return query.path.split('/')[2]
+    elif 'youtu.be' in query.hostname:
+        return query.path[1:]
+    raise ValueError('Not a YouTube URL')
 
 
 def populate_context(context, filter_args) -> dict:
@@ -41,18 +67,41 @@ def populate_context(context, filter_args) -> dict:
     return context
 
 
-class FilteredSponsortimeListView(SingleTableMixin, FilterView):
-    queryset = Sponsortime.objects.order_by('-timesubmitted')
+class FilteredSponsortimeListView(SingleTableView):
+    queryset = list(Sponsortime.objects.order_by('-timesubmitted')[:10])
     table_class = SponsortimeTable
     model = Sponsortime
     template_name = 'browser/index.html'
-    filterset_class = SponsortimeFilter
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         context['updated'] = updated()
+        context['videoidform'] = VideoIDForm
+        context['usernameform'] = UsernameForm
+        context['useridform'] = UserIDForm
         return context
+
+    def post(self, request, *args, **kwargs):
+        if 'videoid_go' in request.POST:
+            form = VideoIDForm(request.POST)
+            if form.is_valid():
+                videoid = form.cleaned_data['videoid']
+                if len(videoid) > 12:
+                    try:
+                        videoid = get_yt_video_id(videoid)
+                    except ValueError:
+                        return HttpResponseRedirect('/')
+                return HttpResponseRedirect(reverse('video', args=[videoid]))
+        elif 'username_go' in request.POST:
+            form = UsernameForm(request.POST)
+            if form.is_valid():
+                return HttpResponseRedirect(reverse('username', args=[form.cleaned_data['username']]))
+        elif 'userid_go' in request.POST:
+            form = UserIDForm(request.POST)
+            if form.is_valid():
+                return HttpResponseRedirect(reverse('userid', args=[form.cleaned_data['userid']]))
+        return HttpResponseRedirect('/')
 
 
 class FilteredVideoListView(SingleTableMixin, FilterView):
