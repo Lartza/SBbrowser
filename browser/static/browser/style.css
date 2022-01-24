@@ -22,6 +22,10 @@ html.dark .bg-light {
     background-color: #737373 !important;
 }
 
+nav img, .navbar-brand {
+    max-height: 40px;
+}
+
 textarea {
     resize: horizontal;
 }
@@ -31,6 +35,6 @@ table button {
     background: none;
 }
 
-nav img, .navbar-brand {
-    max-height: 40px;
+.page-link {
+    white-space: nowrap;
 }
