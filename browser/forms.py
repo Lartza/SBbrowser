@@ -11,3 +11,7 @@ class UsernameForm(forms.Form):
 
 class UserIDForm(forms.Form):
     userid = forms.CharField(label='UserID', max_length=128)
+
+
+class UUIDForm(forms.Form):
+    uuid = forms.CharField(label='UUID', max_length=128)

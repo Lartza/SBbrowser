@@ -1,0 +1,42 @@
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+{% extends "browser/base.html" %}
+{% block head %}
+    <title>{{ videoid }} | SB Browser</title>
+{% endblock head %}
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mt-2">
+            <div class="ratio ratio-16x9">
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ videoid }}?rel=0&start={{ start }}&end={{ end }}#requiredSegment={{ uuid.uuid }}" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-auto mt-2">
+            <div class="col-auto mt-2">
+                <ul class="list-group">
+                    <li class="list-group-item">UUID: {{ uuid.uuid }} <button type="button" class="btn btn-secondary btn-sm clip" data-value="{{ uuid.uuid }}">✂</button></li>
+                    <li class="list-group-item">UserID: <a href="/userid/{{ uuid.user }}/">{{ uuid.user }}</a>{% if vip %}<span title="This user is a VIP" class="ms-1">👑</span>{% endif %}</li>
+                    <li class="list-group-item">Submitted: {{ submitted }}</li>
+                    <li class="list-group-item">{{ starttime }}–{{ endtime }} ({{ length }}) {{ actiontype }} {{ uuid.category }}</li>
+                    <li class="list-group-item">Votes: {{ votes }} Views: {{ uuid.views }}</li>
+                    <li class="list-group-item">Video duration: {{ duration }} Hidden: {{ uuid_hidden }} Shadowhidden: {{ shadowhidden }}</li>
+                </ul>
+            </div>
+            <div class="col-auto mt-2">
+                {% include 'browser/snippets/userid_details.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-auto mt-2">
+            <ul class="list-group">
+                <li class="list-group-item">Submissions: {{ submissions }}</li>
+                <li class="list-group-item">Ignored: {{ ignored }} <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
+                <li class="list-group-item">Locked skips: {{ lockcategories_skip }}</li>
+                <li class="list-group-item">Locked mutes: {{ lockcategories_mute }}</li>
+                <li class="list-group-item">Locked full: {{ lockcategories_full }}</li>
+                <li class="list-group-item"><a href="https://youtu.be/{{ videoid }}?start={{ start }}&end={{ end }}#requiredSegment={{ uuid.uuid }}">YouTube 🔗</a> (with requiredSegment and start/end times) <a class="float-end" href="/video/{{ videoid }}/">Video page 🔗</a></li>
+            </ul>
+        </div>
+    </div>
+    {% include "browser/table.html" %}
+{% endblock body %}

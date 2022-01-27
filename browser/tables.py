@@ -15,7 +15,8 @@ class SponsortimeTable(tables.Table):
                                     '<button class="clip" data-value="{{ value }}">✂</button>'
                                     '<a href="https://youtu.be/{{ value }}">YT</a>')
     uuid = tables.TemplateColumn('<textarea class="form-control" name="UUID" readonly>{{ value }}</textarea>'
-                                 '<button class="clip" data-value="{{ value }}">✂</button>')
+                                 '<button class="clip" data-value="{{ value }}">✂</button>'
+                                 '<a href="/uuid/{{ value }}/">🔗</a>')
     userid = tables.TemplateColumn('<textarea class="form-control" name="UserID" readonly>{{ value }}</textarea>'
                                    '<button class="clip" data-value="{{ value }}">✂</button>'
                                    '<a href="/userid/{{ value }}/">🔗</a>',

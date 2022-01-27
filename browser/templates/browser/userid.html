@@ -6,13 +6,7 @@
 {% block body %}
     <div class="row mt-2">
         <div class="col">
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item">Username:<br><a class="pr-1" href="/username/{{ username|urlencode }}/">{{ username }}</a>{% if vip %}<span title="This user is a VIP" class="badge bg-secondary">👑</span>{% endif %}</li>
-                <li class="list-group-item">Submissions:<br>{{ submissions }}</li>
-                <li class="list-group-item">Ignored submissions:<br>{{ ignored }} ({{ percent_ignored }}%) <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
-                <li class="list-group-item">Views:<br>{{ views }}</li>
-                <li class="list-group-item">Ignored views:<br>{{ ignored_views }} ({{ percent_ignored_views }}%)</li>
-            </ul>
+            {% include 'browser/snippets/userid_details.html' %}
         </div>
     </div>
     {% include "browser/table.html" %}

@@ -10,8 +10,8 @@
             <ul class="list-group list-group-horizontal">
                 <li class="list-group-item">Username:<br>{{ username }}</li>
                 <li class="list-group-item">Unique users:<br>{{ uniques_count }}</li>
-                <li class="list-group-item">Submissions:<br>{{ submissions }}</li>
-                <li class="list-group-item">Ignored submissions:<br>{{ ignored }} ({{ percent_ignored }}%) <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
+                <li class="list-group-item">Submissions:<br>{{ user_submissions }}</li>
+                <li class="list-group-item">Ignored submissions:<br>{{ user_ignored }} ({{ percent_ignored }}%) <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ user_hidden }} ❓</span></li>
                 <li class="list-group-item">Views:<br>{{ views }}</li>
                 <li class="list-group-item">Ignored views:<br>{{ ignored_views }} ({{ percent_ignored_views }}%)</li>
             </ul>
@@ -20,7 +20,7 @@
             <ul class="list-group">
             {% for userid in uniques %}
                 {% is_vip userid as vip %}
-                <li class="list-group-item"><a class="pr-1" href="/userid/{{ userid }}/">{{ userid }}</a>{% if vip %}<span title="This user is a VIP">👑</span>{% endif %}</li>
+                <li class="list-group-item"><a href="/userid/{{ userid }}/">{{ userid }}</a>{% if vip %}<span title="This user is a VIP" class="ms-1">👑</span>{% endif %}</li>
             {% endfor %}
             </ul>
         </div>

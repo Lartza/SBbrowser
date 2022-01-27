@@ -13,7 +13,7 @@
         <div class="col-auto">
             <ul class="list-group">
                 <li class="list-group-item">Submissions: {{ submissions }}</li>
-                <li class="list-group-item">Ignored: {{ ignored }}</li>
+                <li class="list-group-item">Ignored: {{ ignored }} <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
                 <li class="list-group-item">Locked skips: {{ lockcategories_skip }}</li>
                 <li class="list-group-item">Locked mutes: {{ lockcategories_mute }}</li>
                 <li class="list-group-item">Locked full: {{ lockcategories_full }}</li>

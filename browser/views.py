@@ -2,6 +2,7 @@
 import datetime
 from typing import Dict, Any
 from urllib.parse import urlparse, parse_qs
+from math import ceil, floor
 
 from dateutil.parser import isoparse
 import timeago
@@ -16,7 +17,7 @@ from django_tables2 import SingleTableView
 from .models import Config, Username, Lockcategory, Sponsortime, Vipuser
 from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
 from .filters import VideoFilter, UsernameFilter, UserIDFilter
-from .forms import VideoIDForm, UsernameForm, UserIDForm
+from .forms import VideoIDForm, UsernameForm, UserIDForm, UUIDForm
 
 
 def updated() -> str:
@@ -46,13 +47,13 @@ def get_yt_video_id(url):
     raise ValueError('Not a YouTube URL')
 
 
-def populate_context(context, filter_args) -> dict:
-    context['submissions'] = Sponsortime.objects.filter(**filter_args).count()
-    context['ignored'] = Sponsortime.objects.filter(**filter_args).filter(votes__lte=-2).count()
-    context['hidden'] = Sponsortime.objects.filter(**filter_args).filter(votes__gte=-1).filter(
+def populate_context(context, filter_args):
+    context['user_submissions'] = Sponsortime.objects.filter(**filter_args).count()
+    context['user_ignored'] = Sponsortime.objects.filter(**filter_args).filter(votes__lte=-2).count()
+    context['user_hidden'] = Sponsortime.objects.filter(**filter_args).filter(votes__gte=-1).filter(
         Q(hidden=1) | Q(shadowhidden=1)).count()
-    if context['submissions'] != 0:
-        context['percent_ignored'] = round(context['ignored'] / context['submissions'] * 100, 1)
+    if context['user_submissions'] != 0:
+        context['percent_ignored'] = round(context['user_ignored'] / context['user_submissions'] * 100, 1)
     else:
         context['percent_ignored'] = 0.0
     context['views'] = Sponsortime.objects.filter(**filter_args).aggregate(Sum('views'))['views__sum']
@@ -64,11 +65,33 @@ def populate_context(context, filter_args) -> dict:
     else:
         context['percent_ignored_views'] = round(context['ignored_views'] / context['views'] * 100, 1)
     context['updated'] = updated()
-    return context
+
+
+def populate_context_video_details(context, videoid):
+    context['videoid'] = videoid
+    context['submissions'] = Sponsortime.objects.filter(videoid=videoid).count()
+    context['ignored'] = Sponsortime.objects.filter(videoid=videoid).filter(votes__lte=-2).count()
+    context['hidden'] = Sponsortime.objects.filter(videoid=videoid).filter(votes__gte=-1).filter(
+        Q(hidden=1) | Q(shadowhidden=1)).count()
+
+    context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = '—'
+    lockcategories = Lockcategory.objects.filter(videoid=videoid)
+    lockcategories_skip = list(lockcategories.filter(actiontype='skip').only('category')
+                               .values_list('category', flat=True))
+    lockcategories_mute = list(lockcategories.filter(actiontype='mute').only('category')
+                               .values_list('category', flat=True))
+    lockcategories_full = list(lockcategories.filter(actiontype='full').only('category')
+                               .values_list('category', flat=True))
+    if lockcategories_skip:
+        context['lockcategories_skip'] = ', '.join(lockcategories_skip)
+    if lockcategories_mute:
+        context['lockcategories_mute'] = ', '.join(lockcategories_mute)
+    if lockcategories_full:
+        context['lockcategories_full'] = ', '.join(lockcategories_full)
 
 
 class FilteredSponsortimeListView(SingleTableView):
-    queryset = list(Sponsortime.objects.order_by('-timesubmitted')[:10])
+    queryset = list(Sponsortime.objects.order_by('-timesubmitted')[0:10])
     table_class = SponsortimeTable
     model = Sponsortime
     template_name = 'browser/index.html'
@@ -80,6 +103,7 @@ class FilteredSponsortimeListView(SingleTableView):
         context['videoidform'] = VideoIDForm
         context['usernameform'] = UsernameForm
         context['useridform'] = UserIDForm
+        context['uuidform'] = UUIDForm
         return context
 
     def post(self, request, *args, **kwargs):
@@ -101,6 +125,10 @@ class FilteredSponsortimeListView(SingleTableView):
             form = UserIDForm(request.POST)
             if form.is_valid():
                 return HttpResponseRedirect(reverse('userid', args=[form.cleaned_data['userid']]))
+        elif 'uuid_go' in request.POST:
+            form = UUIDForm(request.POST)
+            if form.is_valid():
+                return HttpResponseRedirect(reverse('uuid', args=[form.cleaned_data['uuid']]))
         return HttpResponseRedirect('/')
 
 
@@ -117,27 +145,7 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
         context = super().get_context_data(**kwargs)
 
-        context['videoid'] = self.videoid
-        context['submissions'] = Sponsortime.objects.filter(videoid=self.videoid).count()
-        context['ignored'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__lte=-2).count()
-        context['hidden'] = Sponsortime.objects.filter(videoid=self.videoid).filter(votes__gte=-1).filter(
-            Q(hidden=1) | Q(shadowhidden=1)).count()
-
-        context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = '—'
-        lockcategories = Lockcategory.objects.filter(videoid=self.videoid)
-        lockcategories_skip = list(lockcategories.filter(actiontype='skip').only('category')
-                                   .values_list('category', flat=True))
-        lockcategories_mute = list(lockcategories.filter(actiontype='mute').only('category')
-                                   .values_list('category', flat=True))
-        lockcategories_full = list(lockcategories.filter(actiontype='full').only('category')
-                                   .values_list('category', flat=True))
-        if lockcategories_skip:
-            context['lockcategories_skip'] = ', '.join(lockcategories_skip)
-        if lockcategories_mute:
-            context['lockcategories_mute'] = ', '.join(lockcategories_mute)
-        if lockcategories_full:
-            context['lockcategories_full'] = ', '.join(lockcategories_full)
-
+        populate_context_video_details(context, self.videoid)
         context['updated'] = updated()
         return context
 
@@ -204,3 +212,55 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
     model = Sponsortime
     template_name = 'browser/userid.html'
     filterset_class = UserIDFilter
+
+
+class FilteredUUIDListView(SingleTableMixin, FilterView):
+    def __init__(self):
+        super().__init__()
+        self.videoid = None
+        self.uuid = None
+
+    def get_queryset(self) -> QuerySet:
+        self.uuid = Sponsortime.objects.get(uuid=self.kwargs['uuid'])
+        self.videoid = self.uuid.videoid
+        return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
+
+    def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
+
+        context = super().get_context_data(**kwargs)
+
+        filter_args = {'user': self.uuid.user}
+        try:
+            context['username'] = Username.objects.get(userid=self.uuid.user).username
+        except Username.DoesNotExist:
+            context['username'] = '—'
+        context['vip'] = Vipuser.objects.filter(userid=self.uuid.user).exists()
+
+        context['uuid'] = self.uuid
+        context['submitted'] = SponsortimeTable.render_timesubmitted(self.uuid.timesubmitted)
+        context['starttime'] = SponsortimeTable.render_starttime(self.uuid.starttime)
+        context['endtime'] = SponsortimeTable.render_endtime(self.uuid.endtime)
+        context['length'] = datetime.timedelta(seconds=self.uuid.length())
+        context['actiontype'] = SponsortimeTable.render_actiontype(self.uuid.actiontype)
+        context['duration'] = datetime.timedelta(seconds=self.uuid.videoduration)
+        context['uuid_hidden'] = SponsortimeTable.render_hidden(self.uuid.hidden)
+        context['shadowhidden'] = SponsortimeTable.render_shadowhidden(self.uuid.shadowhidden)
+
+        class FakeRecord:
+            def __init__(self, locked, user_id):
+                self.locked = locked
+                self.user_id = user_id
+
+        context['votes'] = SponsortimeTable.render_votes(self.uuid.votes, FakeRecord(self.uuid.locked, self.uuid.user))
+        context['start'] = floor(self.uuid.starttime)
+        context['end'] = ceil(self.uuid.endtime)
+
+        populate_context_video_details(context, self.videoid)
+        populate_context(context, filter_args)
+
+        return context
+
+    table_class = VideoTable
+    model = Sponsortime
+    template_name = 'browser/uuid.html'
+    filterset_class = VideoFilter
