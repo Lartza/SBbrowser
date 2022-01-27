@@ -1,5 +1,5 @@
 <ul class="list-group list-group-horizontal">
-    <li class="list-group-item">Username:<br><a href="/username/{{ username|urlencode }}/">{{ username }}</a>{% if vip %}<span title="This user is a VIP" class="badge bg-secondary ms-1">👑</span>{% endif %}</li>
+    <li class="list-group-item">Username:<br>{% if username != "—" %}<a href="/username/{{ username|urlencode }}/">{{ username }}</a>{% else %}{{ username }}{% endif %}{% if vip %}<span title="This user is a VIP" class="badge bg-secondary ms-1">👑</span>{% endif %}</li>
     <li class="list-group-item">Submissions:<br>{{ user_submissions }}</li>
     <li class="list-group-item">Ignored submissions:<br>{{ user_ignored }} ({{ percent_ignored }}%) <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ user_hidden }} ❓</span></li>
     <li class="list-group-item">Views:<br>{{ views }}</li>

@@ -229,12 +229,12 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
 
         context = super().get_context_data(**kwargs)
 
-        filter_args = {'user': self.uuid.user}
+        filter_args = {'user': self.uuid.user_id}
         try:
-            context['username'] = Username.objects.get(userid=self.uuid.user).username
+            context['username'] = self.uuid.user.username
         except Username.DoesNotExist:
             context['username'] = '—'
-        context['vip'] = Vipuser.objects.filter(userid=self.uuid.user).exists()
+        context['vip'] = Vipuser.objects.filter(userid=self.uuid.user_id).exists()
 
         context['uuid'] = self.uuid
         context['submitted'] = SponsortimeTable.render_timesubmitted(self.uuid.timesubmitted)
@@ -251,7 +251,7 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
                 self.locked = locked
                 self.user_id = user_id
 
-        context['votes'] = SponsortimeTable.render_votes(self.uuid.votes, FakeRecord(self.uuid.locked, self.uuid.user))
+        context['votes'] = SponsortimeTable.render_votes(self.uuid.votes, FakeRecord(self.uuid.locked, self.uuid.user_id))
         context['start'] = floor(self.uuid.starttime)
         context['end'] = ceil(self.uuid.endtime)
 
