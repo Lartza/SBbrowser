@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4 mt-2">
             <div class="ratio ratio-16x9">
-              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ videoid }}?rel=0&start={{ start }}&end={{ end }}#requiredSegment={{ uuid.uuid }}" allowfullscreen></iframe>
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ videoid }}?rel=0&start={{ start-2 }}&end={{ end }}#requiredSegment={{ uuid.uuid }}" allowfullscreen></iframe>
             </div>
         </div>
         <div class="col-auto mt-2">
@@ -34,7 +34,7 @@
                 <li class="list-group-item">Locked skips: {{ lockcategories_skip }}</li>
                 <li class="list-group-item">Locked mutes: {{ lockcategories_mute }}</li>
                 <li class="list-group-item">Locked full: {{ lockcategories_full }}</li>
-                <li class="list-group-item"><a href="https://youtu.be/{{ videoid }}?start={{ start }}&end={{ end }}#requiredSegment={{ uuid.uuid }}">YouTube 🔗</a> (with requiredSegment and start/end times)<a class="float-end ms-1" href="/video/{{ videoid }}/">Video page 🔗</a></li>
+                <li class="list-group-item"><a href="https://youtube.com/watch?v={{ videoid }}&start={{ start-2 }}s#requiredSegment={{ uuid.uuid }}">YouTube 🔗</a> (with requiredSegment and start times)<a class="float-end ms-1" href="/video/{{ videoid }}/">Video page 🔗</a></li>
             </ul>
         </div>
     </div>
