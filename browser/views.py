@@ -251,9 +251,10 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
                 self.locked = locked
                 self.user_id = user_id
 
-        context['votes'] = SponsortimeTable.render_votes(self.uuid.votes, FakeRecord(self.uuid.locked, self.uuid.user_id))
-        context['start'] = max(floor(self.uuid.starttime)-2, 0)
-        context['end'] = ceil(self.uuid.endtime)+4
+        context['votes'] = SponsortimeTable.render_votes(self.uuid.votes, FakeRecord(self.uuid.locked,
+                                                                                     self.uuid.user_id))
+        context['start'] = max(floor(self.uuid.starttime) - 2, 0)
+        context['end'] = ceil(self.uuid.endtime) + 4
 
         populate_context_video_details(context, self.videoid)
         populate_context(context, filter_args)
