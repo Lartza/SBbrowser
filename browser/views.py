@@ -91,10 +91,12 @@ def populate_context_video_details(context, videoid):
 
 
 class FilteredSponsortimeListView(SingleTableView):
-    queryset = list(Sponsortime.objects.order_by('-timesubmitted')[0:10])
     table_class = SponsortimeTable
-    model = Sponsortime
     template_name = 'browser/index.html'
+
+    def get_queryset(self) -> list:
+        qs = Sponsortime.objects.order_by('-timesubmitted')[:10]
+        return list(qs)
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -150,7 +152,6 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
         return context
 
     table_class = VideoTable
-    model = Sponsortime
     template_name = 'browser/video.html'
     filterset_class = VideoFilter
 
@@ -178,7 +179,6 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
         return context
 
     table_class = UsernameTable
-    model = Sponsortime
     template_name = 'browser/username.html'
     filterset_class = UsernameFilter
 
@@ -209,7 +209,6 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         return context
 
     table_class = UserIDTable
-    model = Sponsortime
     template_name = 'browser/userid.html'
     filterset_class = UserIDFilter
 
@@ -262,6 +261,5 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
         return context
 
     table_class = VideoTable
-    model = Sponsortime
     template_name = 'browser/uuid.html'
     filterset_class = VideoFilter
