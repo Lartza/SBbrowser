@@ -71,7 +71,9 @@ class SponsortimeTable(tables.Table):
         if value == 'mute':
             return format_html('<span title="Mute">🔇</span>')
         if value == 'full':
-            return format_html('<span title="Full video">♾️</span>')
+            return format_html('<span title="Full Video Label">♾️</span>')
+        if value == 'poi':
+            return format_html('<span title="Highlight">✨️</span>')
         return '—'
 
     @staticmethod
