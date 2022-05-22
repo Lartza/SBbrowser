@@ -61,6 +61,7 @@ class Sponsortime(models.Model):
     hidden = models.IntegerField(blank=True, null=True)
     shadowhidden = models.IntegerField(blank=True, null=True, verbose_name='Shadowhidden', db_column='shadowHidden')
     hashedvideoid = models.TextField(blank=True, null=True, db_column='hashedVideoID')
+    useragent = models.TextField(blank=True, null=False, default='', db_column='userAgent')
 
     class Meta:
         managed = False

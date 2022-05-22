@@ -19,6 +19,7 @@
                     <li class="list-group-item">{{ starttime }}–{{ endtime }} ({{ length }}) {{ actiontype }} {{ uuid.category }}</li>
                     <li class="list-group-item">Votes: {{ votes }} Views: {{ uuid.views }}</li>
                     <li class="list-group-item">Video duration: {{ duration }} Hidden: {{ uuid_hidden }} Shadowhidden: {{ shadowhidden }}</li>
+                    <li class="list-group-item">User Agent: {% if uuid.useragent %}{{ uuid.useragent }}{% else %}—{% endif %}</li>
                 </ul>
             </div>
             <div class="col-auto mt-2">
