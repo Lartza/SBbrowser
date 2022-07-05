@@ -1,4 +1,4 @@
-Django==4.0.4
+Django==4.0.6
 django-bootstrap5==21.3
 django-tables2==2.4.1
 django-filter==21.1
