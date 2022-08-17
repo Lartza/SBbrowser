@@ -25,6 +25,6 @@ STATIC_ROOT = environ['STATIC_ROOT']
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'unix:/run/redis/redis.sock',
+        'LOCATION': 'unix:///var/run/redis/redis-server.sock',
     }
 }

@@ -1,7 +1,9 @@
-Django==4.0.4
-django-bootstrap5==21.3
+Django==4.1
+django-bootstrap5==22.1
 django-tables2==2.4.1
-django-filter==21.1
+django-filter==22.1
 psycopg2==2.9.3
 python-dateutil==2.8.2
 timeago==1.0.15
+redis==4.3.4
+hiredis==2.0.0
