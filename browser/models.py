@@ -4,7 +4,7 @@ from django.db import models
 
 class Config(models.Model):
     key = models.TextField(primary_key=True)
-    value = models.TextField(blank=True, null=True)
+    value = models.TextField()
 
     class Meta:
         managed = False
@@ -13,7 +13,8 @@ class Config(models.Model):
 
 class Username(models.Model):
     userid = models.TextField(primary_key=True, db_column='userID')
-    username = models.TextField(blank=True, null=True, verbose_name='Username', db_column='userName')
+    username = models.TextField(verbose_name='Username', db_column='userName')
+    locked = models.IntegerField(default=0)
 
     class Meta:
         managed = False
@@ -32,10 +33,14 @@ class Vipuser(models.Model):
 
 
 class Lockcategory(models.Model):
-    videoid = models.TextField(primary_key=True, db_column='videoID')
-    userid = models.TextField(blank=True, null=True, db_column='userID')
-    actiontype = models.TextField(blank=True, null=False, db_column='actionType')
-    category = models.TextField(blank=True, null=True)
+    videoid = models.TextField(db_column='videoID')
+    userid = models.TextField(db_column='userID')
+    actiontype = models.TextField(default='skip', db_column='actionType')
+    category = models.TextField()
+    hashedvideoid = models.TextField(blank=True, default='', db_column='hashedVideoID')
+    reason = models.TextField(blank=True, default='')
+    service = models.TextField(default='YouTube')
+    id = models.AutoField(primary_key=True)
 
     class Meta:
         managed = False
@@ -43,25 +48,27 @@ class Lockcategory(models.Model):
 
 
 class Sponsortime(models.Model):
-    videoid = models.TextField(blank=True, null=True, verbose_name='Video ID', db_column='videoID')
-    starttime = models.FloatField(blank=True, null=True, verbose_name='Start', db_column='startTime')
-    endtime = models.FloatField(blank=True, null=True, verbose_name='End', db_column='endTime')
-    votes = models.IntegerField(blank=True, null=True)
-    locked = models.IntegerField(blank=True, null=True)
-    incorrectvotes = models.IntegerField(blank=True, null=True, db_column='incorrectVotes')
+    videoid = models.TextField(verbose_name='Video ID', db_column='videoID')
+    starttime = models.FloatField(verbose_name='Start', db_column='startTime')
+    endtime = models.FloatField(verbose_name='End', db_column='endTime')
+    votes = models.IntegerField()
+    locked = models.IntegerField(default=0)
+    incorrectvotes = models.IntegerField(default=1, db_column='incorrectVotes')
     uuid = models.TextField(primary_key=True, verbose_name='UUID', db_column='UUID')
-    user = models.ForeignKey(Username, blank=True, null=True, on_delete=models.PROTECT, db_constraint=False,
-                             db_column='userID', verbose_name='UserID')
-    timesubmitted = models.BigIntegerField(blank=True, null=True, verbose_name='Submitted', db_column='timeSubmitted')
-    views = models.IntegerField(blank=True, null=True)
-    category = models.TextField(blank=True, null=True)
-    service = models.TextField(blank=True, null=True)
-    videoduration = models.FloatField(db_column='videoDuration')
-    actiontype = models.TextField(db_column='actionType')
-    hidden = models.IntegerField(blank=True, null=True)
-    shadowhidden = models.IntegerField(blank=True, null=True, verbose_name='Shadowhidden', db_column='shadowHidden')
-    hashedvideoid = models.TextField(blank=True, null=True, db_column='hashedVideoID')
-    useragent = models.TextField(blank=True, null=False, default='', db_column='userAgent')
+    user = models.ForeignKey(Username, on_delete=models.PROTECT, db_constraint=False, verbose_name='UserID',
+                             db_column='userID')
+    timesubmitted = models.BigIntegerField(verbose_name='Submitted', db_column='timeSubmitted')
+    views = models.IntegerField()
+    category = models.TextField(default='sponsor')
+    actiontype = models.TextField(default='skip', db_column='actionType')
+    service = models.TextField(default='YouTube')
+    videoduration = models.FloatField(default=0, db_column='videoDuration')
+    hidden = models.IntegerField(default=0)
+    reputation = models.FloatField(default=0)
+    shadowhidden = models.IntegerField(verbose_name='Shadowhidden', db_column='shadowHidden')
+    hashedvideoid = models.TextField(blank=True, default='', db_column='hashedVideoID')
+    useragent = models.TextField(blank=True, default='', db_column='userAgent')
+    description = models.TextField(blank=True, default='')
 
     class Meta:
         managed = False
@@ -73,22 +80,25 @@ class Sponsortime(models.Model):
     def length(self) -> float:
         return self.endtime - self.starttime
 
-# class Categoryvote(models.Model):
-#    uuid = models.TextField(primary_key=True, db_column='UUID')
-#    category = models.TextField(blank=True, null=True)
-#    votes = models.IntegerField(blank=True, null=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'categoryVotes'
+
+class Categoryvote(models.Model):
+    uuid = models.TextField(db_column='UUID')
+    category = models.TextField()
+    votes = models.IntegerField(default=0)
+    id = models.AutoField(primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'categoryVotes'
 
 
-# class Warnings(models.Model):
-#    userid = models.TextField(db_column='userID')  # Field name made lowercase.
-#    issuetime = models.BigIntegerField(db_column='issueTime')  # Field name made lowercase.
-#    issueruserid = models.TextField(db_column='issuerUserID')  # Field name made lowercase.
-#    enabled = models.IntegerField()
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'warnings'
+class Warnings(models.Model):
+    userid = models.TextField(db_column='userID')
+    issuetime = models.IntegerField(db_column='issueTime')
+    issueruserid = models.TextField(db_column='issuerUserID')
+    enabled = models.IntegerField()
+    reason = models.TextField(blank=True, default='')
+
+    class Meta:
+        managed = False
+        db_table = 'warnings'
