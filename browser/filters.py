@@ -24,11 +24,12 @@ class UserIDFilter(FilterSet):
     views = RangeFilter(widget=CustomRangeWidget(attrs={'type': 'number', 'step': 1},
                                                  from_attrs={'placeholder': 'Views from'},
                                                  to_attrs={'placeholder': 'Views to'}))
-    category = MultipleChoiceFilter(choices=(('exclusive_access', 'Exclusive Access'), ('filler', 'Filler'),
-                                             ('poi_highlight', 'Highlight'), ('interaction', 'Interaction'),
-                                             ('intro', 'Intro'), ('music_offtopic', 'music_offtopic'),
-                                             ('outro', 'Outro'), ('preview', 'Preview'),
-                                             ('selfpromo', 'Selfpromo'), ('sponsor', 'Sponsor'),), distinct=False)
+    category = MultipleChoiceFilter(choices=(('chapter', 'Chapter'), ('exclusive_access', 'Exclusive Access'),
+                                             ('filler', 'Filler'), ('poi_highlight', 'Highlight'),
+                                             ('interaction', 'Interaction'), ('intro', 'Intro'),
+                                             ('music_offtopic', 'Non-Music'), ('outro', 'Outro'),
+                                             ('preview', 'Preview'), ('selfpromo', 'Selfpromo'),
+                                             ('sponsor', 'Sponsor'),), distinct=False)
     category.always_filter = False
     shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden')
     actiontype = MultipleChoiceFilter(choices=(('skip', 'Skip'), ('mute', 'Mute'), ('full', 'Full Video Label'),
