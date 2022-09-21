@@ -13,11 +13,11 @@ from .columns import LengthColumn
 class SponsortimeTable(tables.Table):
     videoid = tables.TemplateColumn('<a href="/video/{{ value }}/">{{ value }}</a>'
                                     '<button class="clip" data-value="{{ value }}">✂</button>'
-                                    '<a href="https://youtu.be/{{ value }}">YT</a>')
-    uuid = tables.TemplateColumn('<textarea class="form-control" name="UUID" readonly>{{ value }}</textarea>'
+                                    '<a href="https://youtu.be/{{ value }}">YT</a>', verbose_name='VideoID')
+    uuid = tables.TemplateColumn('<textarea class="form-control uuid" name="UUID" readonly>{{ value }}</textarea>'
                                  '<button class="clip" data-value="{{ value }}">✂</button>'
-                                 '<a href="/uuid/{{ value }}/">🔗</a>')
-    userid = tables.TemplateColumn('<textarea class="form-control" name="UserID" readonly>{{ value }}</textarea>'
+                                 '<a href="/uuid/{{ value }}/">🔗</a>', verbose_name='UUID')
+    userid = tables.TemplateColumn('<textarea class="form-control userid" name="UserID" readonly>{{ value }}</textarea>'
                                    '<button class="clip" data-value="{{ value }}">✂</button>'
                                    '<a href="/userid/{{ value }}/">🔗</a>',
                                    verbose_name='UserID', accessor='user_id')
@@ -29,6 +29,7 @@ class SponsortimeTable(tables.Table):
     length = LengthColumn(initial_sort_descending=True)
     votes = tables.Column(initial_sort_descending=True)
     views = tables.Column(initial_sort_descending=True)
+    actiontype = tables.Column(verbose_name='Action')
 
     class Meta: # noqa
         model = Sponsortime

@@ -38,3 +38,11 @@ table button {
 .page-link {
     white-space: nowrap;
 }
+
+.uuid {
+    max-width: 150px;
+}
+
+.userid {
+    max-width: 200px;
+}
