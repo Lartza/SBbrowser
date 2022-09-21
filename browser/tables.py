@@ -75,6 +75,8 @@ class SponsortimeTable(tables.Table):
             return format_html('<span title="Full Video Label">♾️</span>')
         if value == 'poi':
             return format_html('<span title="Highlight">✨️</span>')
+        if value == 'chapter':
+            return format_html('<span title="Chapter">🏷️</span>')
         return '—'
 
     @staticmethod
