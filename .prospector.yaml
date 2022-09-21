@@ -29,6 +29,6 @@ pylint:
     max-parents: 12
     django-settings-module: SBtools.settings.development
 
-pep8:
+pycodestyle:
   options:
     max-line-length: 120

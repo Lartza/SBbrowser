@@ -32,8 +32,9 @@ class UserIDFilter(FilterSet):
                                              ('sponsor', 'Sponsor'),), distinct=False)
     category.always_filter = False
     shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden')
-    actiontype = MultipleChoiceFilter(choices=(('chapter', 'Chapter'), ('full', 'Full Video Label'), ('poi', 'Highlight'),
-                                               ('mute', 'Mute'), ('skip', 'Skip')), distinct=False)
+    actiontype = MultipleChoiceFilter(choices=(('chapter', 'Chapter'), ('full', 'Full Video Label'),
+                                               ('poi', 'Highlight'), ('mute', 'Mute'), ('skip', 'Skip')),
+                                      distinct=False)
 
     class Meta:
         model = Sponsortime

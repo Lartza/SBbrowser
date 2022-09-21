@@ -109,6 +109,9 @@ class FilteredSponsortimeListView(SingleTableView):
         return context
 
     def post(self, request, *args, **kwargs):
+        form = None
+        page = None
+
         if 'videoid_go' in request.POST:
             form = VideoIDForm(request.POST)
             if form.is_valid():
@@ -121,16 +124,17 @@ class FilteredSponsortimeListView(SingleTableView):
                 return HttpResponseRedirect(reverse('video', args=[videoid]))
         elif 'username_go' in request.POST:
             form = UsernameForm(request.POST)
-            if form.is_valid():
-                return HttpResponseRedirect(reverse('username', args=[form.cleaned_data['username']]))
+            page = 'username'
         elif 'userid_go' in request.POST:
             form = UserIDForm(request.POST)
-            if form.is_valid():
-                return HttpResponseRedirect(reverse('userid', args=[form.cleaned_data['userid']]))
+            page = 'userid'
         elif 'uuid_go' in request.POST:
             form = UUIDForm(request.POST)
-            if form.is_valid():
-                return HttpResponseRedirect(reverse('uuid', args=[form.cleaned_data['uuid']]))
+            page = 'uuid'
+
+        if form.is_valid():
+            return HttpResponseRedirect(reverse(page, args=[form.cleaned_data[page]]))
+
         return HttpResponseRedirect('/')
 
 
