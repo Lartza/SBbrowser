@@ -5,9 +5,19 @@
 {% endblock head %}
 {% block body %}
     <div class="row mt-2">
-        <div class="col">
+        <div class="col-auto">
             {% include 'browser/snippets/userid_details.html' %}
         </div>
+        {% if warnings %}
+        <div class="col-auto">
+            <ul class="list-group">
+                <li class="list-group-item">Active warnings:</li>
+                {% for warning in warnings %}
+                    <li class="list-group-item"><textarea class="form-control warning-textarea" readonly>{{ warning }}</textarea></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
     {% include "browser/table.html" %}
 {% endblock body %}

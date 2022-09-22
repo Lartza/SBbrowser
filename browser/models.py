@@ -94,7 +94,7 @@ class Categoryvote(models.Model):
 
 class Warnings(models.Model):
     userid = models.TextField(db_column='userID')
-    issuetime = models.IntegerField(db_column='issueTime')
+    issuetime = models.IntegerField(db_column='issueTime', primary_key=True)
     issueruserid = models.TextField(db_column='issuerUserID')
     enabled = models.IntegerField()
     reason = models.TextField(blank=True, default='')

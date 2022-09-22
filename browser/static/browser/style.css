@@ -46,3 +46,9 @@ table button {
 .userid {
     max-width: 200px;
 }
+
+.warning-textarea {
+    width: 600px;
+    min-height: 20px !important;
+    line-height: 20px;
+}

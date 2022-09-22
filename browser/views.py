@@ -14,7 +14,7 @@ from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 from django_tables2 import SingleTableView
 
-from .models import Config, Username, Lockcategory, Sponsortime, Vipuser
+from .models import Config, Username, Lockcategory, Sponsortime, Vipuser, Warnings
 from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
 from .filters import VideoFilter, UsernameFilter, UserIDFilter
 from .forms import VideoIDForm, UsernameForm, UserIDForm, UUIDForm
@@ -207,6 +207,7 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
         except Username.DoesNotExist:
             context['username'] = '—'
         context['vip'] = Vipuser.objects.filter(userid=self.userid).exists()
+        context['warnings'] = Warnings.objects.filter(userid=self.userid, enabled=1).values_list('reason', flat=True)
 
         populate_context(context, filter_args)
 
