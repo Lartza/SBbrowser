@@ -7,7 +7,7 @@ from math import ceil, floor
 from dateutil.parser import isoparse
 import timeago
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.db.models import Sum, QuerySet, Q
 from django_filters.views import FilterView
@@ -17,7 +17,6 @@ from django_tables2 import SingleTableView
 from .models import Config, Username, Lockcategory, Sponsortime, Vipuser, Warnings
 from .tables import SponsortimeTable, VideoTable, UsernameTable, UserIDTable
 from .filters import VideoFilter, UsernameFilter, UserIDFilter
-from .forms import VideoIDForm, UsernameForm, UserIDForm, UUIDForm
 
 
 def updated() -> str:
@@ -102,18 +101,28 @@ class FilteredSponsortimeListView(SingleTableView):
         context = super().get_context_data(**kwargs)
 
         context['updated'] = updated()
-        context['videoidform'] = VideoIDForm
-        context['usernameform'] = UsernameForm
-        context['useridform'] = UserIDForm
-        context['uuidform'] = UUIDForm
         return context
+
+    def get(self, request, *args, **kwargs):
+        videoid = request.GET.get('videoid')
+        if videoid:
+            return HttpResponseRedirect(reverse('video', args=[videoid]))
+        username = request.GET.get('username')
+        if username:
+            return HttpResponseRedirect(reverse('username', args=[username]))
+        userid = request.GET.get('userid')
+        if userid:
+            return HttpResponseRedirect(reverse('userid', args=[userid]))
+        uuid = request.GET.get('uuid')
+        if uuid:
+            return HttpResponseRedirect(reverse('uuid', args=[uuid]))
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = None
         page = None
 
         if 'videoid_go' in request.POST:
-            form = VideoIDForm(request.POST)
             if form.is_valid():
                 videoid = form.cleaned_data['videoid']
                 if len(videoid) > 12:
@@ -123,13 +132,10 @@ class FilteredSponsortimeListView(SingleTableView):
                         return HttpResponseRedirect('/')
                 return HttpResponseRedirect(reverse('video', args=[videoid]))
         elif 'username_go' in request.POST:
-            form = UsernameForm(request.POST)
             page = 'username'
         elif 'userid_go' in request.POST:
-            form = UserIDForm(request.POST)
             page = 'userid'
         elif 'uuid_go' in request.POST:
-            form = UUIDForm(request.POST)
             page = 'uuid'
 
         if form.is_valid():
@@ -145,7 +151,10 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
     def get_queryset(self) -> QuerySet:
         self.videoid = self.kwargs['videoid']
-        return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
+        query = Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
+        if not query.exists():
+            raise Http404
+        return query
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
 
@@ -167,7 +176,10 @@ class FilteredUsernameListView(SingleTableMixin, FilterView):
 
     def get_queryset(self) -> QuerySet:
         self.username = self.kwargs['username']
-        return Sponsortime.objects.filter(user__username=self.username).order_by('-timesubmitted')
+        query = Sponsortime.objects.filter(user__username=self.username).order_by('-timesubmitted')
+        if not query.exists():
+            raise Http404
+        return query
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -194,7 +206,10 @@ class FilteredUserIDListView(SingleTableMixin, FilterView):
 
     def get_queryset(self) -> QuerySet:
         self.userid = self.kwargs['userid']
-        return Sponsortime.objects.filter(user=self.userid).order_by('-timesubmitted')
+        query = Sponsortime.objects.filter(user=self.userid).order_by('-timesubmitted')
+        if not query.exists():
+            raise Http404
+        return query
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -225,7 +240,10 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
         self.uuid = None
 
     def get_queryset(self) -> QuerySet:
-        self.uuid = Sponsortime.objects.get(uuid=self.kwargs['uuid'])
+        try:
+            self.uuid = Sponsortime.objects.get(uuid=self.kwargs['uuid'])
+        except Sponsortime.DoesNotExist:
+            raise Http404
         self.videoid = self.uuid.videoid
         return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
 

@@ -23,3 +23,5 @@ for (let i = 0, element; element = elements[i]; i++) {
         navigator.clipboard.writeText(element.dataset.value);
     });
 }
+
+window.onunload = function(){};

@@ -1,0 +1,10 @@
+{# SPDX-License-Identifier: AGPL-3.0-or-later #}
+{% extends "browser/index.html" %}
+{% load django_bootstrap5 %}
+{% block head %}
+<title>Not Found | SB Browser</title>
+{% endblock head %}
+{% block body %}
+    {{ block.super }}
+    <h2>Whatever you just tried to look for couldn't be found</h2>
+{% endblock body %}

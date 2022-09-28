@@ -10,31 +10,39 @@
 {% block body %}
     <div class="row">
         <div class="col-12 col-md-3">
-            <form action={% url 'index' %} method="post">
-                {% csrf_token %}
-                {% bootstrap_form videoidform %}
-                <button type="submit" class="btn btn-primary" name="videoid_go" value="videoid_go">Go</button>
+            <form action={% url 'index' %} method="get">
+                <div class="mb-3">
+                    <label class="form-label" for="videoid">VideoID</label>
+                    <input type="text" name="videoid" maxlength="64" class="form-control" placeholder="VideoID" required="" id="videoid">
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
             </form>
         </div>
         <div class="col-12 col-md-3">
-            <form action={% url 'index' %} method="post">
-                {% csrf_token %}
-                {% bootstrap_form usernameform %}
-                <button type="submit" class="btn btn-primary" name="username_go" value="username_go">Go</button>
+            <form action={% url 'index' %} method="get">
+                <div class="mb-3">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" name="username" maxlength="128" class="form-control" placeholder="Username" required="" id="username">
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
             </form>
         </div>
         <div class="col-12 col-md-3">
-            <form action={% url 'index' %} method="post">
-                {% csrf_token %}
-                {% bootstrap_form useridform %}
-                <button type="submit" class="btn btn-primary" name="userid_go" value="userid_go">Go</button>
+            <form action={% url 'index' %} method="get">
+                <div class="mb-3">
+                    <label class="form-label" for="userid">UserID</label>
+                    <input type="text" name="userid" maxlength="128" class="form-control" placeholder="UserID" required="" id="userid">
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
             </form>
         </div>
         <div class="col-12 col-md-3">
-            <form action={% url 'index' %} method="post">
-                {% csrf_token %}
-                {% bootstrap_form uuidform %}
-                <button type="submit" class="btn btn-primary" name="uuid_go" value="uuid_go">Go</button>
+            <form action={% url 'index' %} method="get">
+                <div class="mb-3">
+                    <label class="form-label" for="uuid">UUID</label>
+                    <input type="text" name="uuid" maxlength="128" class="form-control" placeholder="UUID" required="" id="uuid">
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
             </form>
         </div>
     </div>
