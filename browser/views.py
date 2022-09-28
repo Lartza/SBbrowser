@@ -118,31 +118,6 @@ class FilteredSponsortimeListView(SingleTableView):
             return HttpResponseRedirect(reverse('uuid', args=[uuid]))
         return super().get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        form = None
-        page = None
-
-        if 'videoid_go' in request.POST:
-            if form.is_valid():
-                videoid = form.cleaned_data['videoid']
-                if len(videoid) > 12:
-                    try:
-                        videoid = get_yt_video_id(videoid)
-                    except ValueError:
-                        return HttpResponseRedirect('/')
-                return HttpResponseRedirect(reverse('video', args=[videoid]))
-        elif 'username_go' in request.POST:
-            page = 'username'
-        elif 'userid_go' in request.POST:
-            page = 'userid'
-        elif 'uuid_go' in request.POST:
-            page = 'uuid'
-
-        if form.is_valid():
-            return HttpResponseRedirect(reverse(page, args=[form.cleaned_data[page]]))
-
-        return HttpResponseRedirect('/')
-
 
 class FilteredVideoListView(SingleTableMixin, FilterView):
     def __init__(self):
@@ -151,10 +126,7 @@ class FilteredVideoListView(SingleTableMixin, FilterView):
 
     def get_queryset(self) -> QuerySet:
         self.videoid = self.kwargs['videoid']
-        query = Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
-        if not query.exists():
-            raise Http404
-        return query
+        return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
 
     def get_context_data(self, **kwargs: Dict[str, Any]) -> Dict[str, Any]:
 
