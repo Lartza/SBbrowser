@@ -8,6 +8,7 @@ from dateutil.parser import isoparse
 import timeago
 
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Sum, QuerySet, Q
 from django_filters.views import FilterView
@@ -258,3 +259,8 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     table_class = VideoTable
     template_name = 'browser/uuid.html'
     filterset_class = VideoFilter
+
+
+def view_404(request, exception):
+    context = {'updated': updated()}
+    return render(request, 'browser/404.html', status=404, context=context)
