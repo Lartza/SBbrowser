@@ -74,20 +74,17 @@ def populate_context_video_details(context, videoid):
     context['hidden'] = Sponsortime.objects.filter(videoid=videoid).filter(votes__gte=-1).filter(
         Q(hidden=1) | Q(shadowhidden=1)).count()
 
-    context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = '—'
+    context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = None
     lockcategories = Lockcategory.objects.filter(videoid=videoid)
-    lockcategories_skip = list(lockcategories.filter(actiontype='skip').only('category')
-                               .values_list('category', flat=True))
-    lockcategories_mute = list(lockcategories.filter(actiontype='mute').only('category')
-                               .values_list('category', flat=True))
-    lockcategories_full = list(lockcategories.filter(actiontype='full').only('category')
-                               .values_list('category', flat=True))
+    lockcategories_skip = lockcategories.filter(actiontype='skip')
+    lockcategories_mute = lockcategories.filter(actiontype='mute')
+    lockcategories_full = lockcategories.filter(actiontype='full')
     if lockcategories_skip:
-        context['lockcategories_skip'] = ', '.join(lockcategories_skip)
+        context['lockcategories_skip'] = lockcategories_skip
     if lockcategories_mute:
-        context['lockcategories_mute'] = ', '.join(lockcategories_mute)
+        context['lockcategories_mute'] = lockcategories_mute
     if lockcategories_full:
-        context['lockcategories_full'] = ', '.join(lockcategories_full)
+        context['lockcategories_full'] = lockcategories_full
 
 
 class FilteredSponsortimeListView(SingleTableView):
@@ -215,8 +212,8 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     def get_queryset(self) -> QuerySet:
         try:
             self.uuid = Sponsortime.objects.get(uuid=self.kwargs['uuid'])
-        except Sponsortime.DoesNotExist:
-            raise Http404
+        except Sponsortime.DoesNotExist as e:
+            raise Http404 from e
         self.videoid = self.uuid.videoid
         return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
 
