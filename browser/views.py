@@ -212,8 +212,8 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     def get_queryset(self) -> QuerySet:
         try:
             self.uuid = Sponsortime.objects.get(uuid=self.kwargs['uuid'])
-        except Sponsortime.DoesNotExist as e:
-            raise Http404 from e
+        except Sponsortime.DoesNotExist as exc:
+            raise Http404 from exc
         self.videoid = self.uuid.videoid
         return Sponsortime.objects.filter(videoid=self.videoid).order_by('-timesubmitted')
 
@@ -258,6 +258,6 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     filterset_class = VideoFilter
 
 
-def view_404(request, exception):
+def view_404(request, _exception):
     context = {'updated': updated()}
     return render(request, 'browser/404.html', status=404, context=context)

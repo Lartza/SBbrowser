@@ -93,6 +93,12 @@ class SponsortimeTable(tables.Table):
         return '—'
 
     @staticmethod
+    def render_category(value: str, record) -> str:
+        if record.description:
+            return format_html('<span title="{}">{}</span>', record.description, value)
+        return value
+
+    @staticmethod
     def order_username(queryset: QuerySet, is_descending: bool) -> (QuerySet, bool):
         if is_descending:
             queryset = queryset.select_related('user').order_by(F('user__username').desc(nulls_last=True))
