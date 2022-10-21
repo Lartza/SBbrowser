@@ -27,7 +27,7 @@ def updated() -> str:
 
 
 def get_yt_video_id(url):
-    """Returns Video_ID extracting from the given url of Youtube"""
+    """Returns Video_ID extracting from the given url of YouTube"""
 
     if url.startswith(('youtu', 'www')):
         url = 'http://' + url

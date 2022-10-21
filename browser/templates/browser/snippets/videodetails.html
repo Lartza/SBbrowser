@@ -1,0 +1,25 @@
+<li class="list-group-item">Submissions: {{ submissions }}</li>
+<li class="list-group-item">Ignored: {{ ignored }} <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
+<li class="list-group-item">Locked skips: {% if lockcategories_skip %}
+        {% for lock in lockcategories_skip %}
+            <span title="{{ lock.reason }}">{{ lock.category }}</span>
+        {% endfor %}
+    {% else %}
+        <span>—</span>
+    {% endif %}
+</li>
+<li class="list-group-item">Locked mutes: {% if lockcategories_mute %}
+        {% for lock in lockcategories_mute %}
+            <span title="{{ lock.reason }}">{{ lock.category }}</span>
+        {% endfor %}
+    {% else %}
+        <span>—</span>
+    {% endif %}</li>
+<li class="list-group-item">Locked full: {% if lockcategories_full %}
+        {% for lock in lockcategories_full %}
+            <span title="{{ lock.reason }}">{{ lock.category }}</span>
+        {% endfor %}
+    {% else %}
+        <span>—</span>
+    {% endif %}
+</li>

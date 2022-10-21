@@ -31,11 +31,7 @@
     <div class="row mb-4">
         <div class="col-auto mt-2">
             <ul class="list-group">
-                <li class="list-group-item">Submissions: {{ submissions }}</li>
-                <li class="list-group-item">Ignored: {{ ignored }} <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
-                <li class="list-group-item">Locked skips: {{ lockcategories_skip }}</li>
-                <li class="list-group-item">Locked mutes: {{ lockcategories_mute }}</li>
-                <li class="list-group-item">Locked full: {{ lockcategories_full }}</li>
+                {% include "browser/snippets/videodetails.html" %}
                 <li class="list-group-item"><a href="https://www.youtube.com/watch?v={{ videoid }}{% if start != 0 %}&t={{ start }}s{% endif %}#requiredSegment={{ uuid.uuid }}">YouTube 🔗</a> (with requiredSegment and start time)<a class="float-end ms-1" href="/video/{{ videoid }}/">Video page 🔗</a></li>
             </ul>
         </div>

@@ -16,30 +16,7 @@
                 {% bootstrap_alert 'No submissions exist for this video, check that the Video ID is correct and when the database was last updated.' dismissible=False extra_classes='mb-1' %}
             {% endif %}
             <ul class="list-group">
-                <li class="list-group-item">Submissions: {{ submissions }}</li>
-                <li class="list-group-item">Ignored: {{ ignored }} <span title="Segments that are also not sent to users, but don't count as ignored">+ {{ hidden }} ❓</span></li>
-                <li class="list-group-item">Locked skips: {% if lockcategories_skip %}
-                        {% for lock in lockcategories_skip %}
-                            <span title="{{ lock.reason }}">{{ lock.category }}</span>
-                        {% endfor %}
-                    {% else %}
-                        <span>—</span>
-                    {% endif %}
-                </li>
-                <li class="list-group-item">Locked mutes: {% if lockcategories_mute %}
-                        {% for lock in lockcategories_mute %}
-                            <span title="{{ lock.reason }}">{{ lock.category }}</span>
-                        {% endfor %}
-                    {% else %}
-                        <span>—</span>
-                    {% endif %}</li>
-                <li class="list-group-item">Locked full: {% if lockcategories_full %}
-                        {% for lock in lockcategories_full %}
-                            <span title="{{ lock.reason }}">{{ lock.category }}</span>
-                        {% endfor %}
-                    {% else %}
-                        <span>—</span>
-                    {% endif %}</li>
+                {% include "browser/snippets/videodetails.html" %}
                 <li class="list-group-item"><a href="https://youtu.be/{{ videoid }}">YouTube 🔗</a></li>
             </ul>
         </div>
