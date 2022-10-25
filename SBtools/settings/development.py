@@ -4,6 +4,7 @@ from SBtools.settings.common import * # noqa
 SECRET_KEY = '70wv4w$tv1suzuf1-2_h9-p%#!qtsz7%(90x%4a=@3yw6rz%0#' # noqa
 
 DEBUG = True
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 DATABASES = {
     'default': {

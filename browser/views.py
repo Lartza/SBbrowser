@@ -258,6 +258,7 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     filterset_class = VideoFilter
 
 
-def view_404(request, _exception):
+def view_404(request, exception):
+    del exception  # unused
     context = {'updated': updated()}
     return render(request, 'browser/404.html', status=404, context=context)
