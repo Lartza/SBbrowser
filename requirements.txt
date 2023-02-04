@@ -1,4 +1,4 @@
-Django==4.1.5
+Django==4.1.6
 django-bootstrap5==22.2
 django-tables2==2.5.1
 django-filter==22.1
@@ -6,4 +6,4 @@ psycopg2==2.9.5
 python-dateutil==2.8.2
 timeago==1.0.16
 redis==4.4.2
-hiredis==2.1.1
+hiredis==2.2.1
