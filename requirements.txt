@@ -5,5 +5,5 @@ django-filter==22.1
 psycopg2==2.9.5
 python-dateutil==2.8.2
 timeago==1.0.16
-redis==4.4.2
+redis==4.5.3
 hiredis==2.2.1
