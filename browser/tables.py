@@ -43,16 +43,27 @@ class SponsortimeTable(tables.Table):
         return datetime.datetime.utcfromtimestamp(value / 1000.).strftime('%Y-%m-%d %H:%M:%S')
 
     @staticmethod
-    def render_starttime(value: float) -> str:
+    def render_time(value: float) -> str:
         if value < 0:
-            return '-' + str(datetime.timedelta(seconds=-value))
-        return str(datetime.timedelta(seconds=value))
+            time = f'-{str(datetime.timedelta(seconds=-value))}'
+        else:
+            time = str(datetime.timedelta(seconds=value))
+        try:
+            time, decimal = time.split('.')
+            decimal = decimal.rstrip('0')
+            if len(decimal) > 3:
+                return format_html('{}.<strong>{}</strong>', time, decimal)
+            return f'{time}.{decimal}'
+        except ValueError:
+            return time
+
+    @staticmethod
+    def render_starttime(value: float) -> str:
+        return SponsortimeTable.render_time(value)
 
     @staticmethod
     def render_endtime(value: float) -> str:
-        if value < 0:
-            return '-' + str(datetime.timedelta(seconds=-value))
-        return str(datetime.timedelta(seconds=value))
+        return SponsortimeTable.render_time(value)
 
     @staticmethod
     def render_votes(value: int, record) -> str:
@@ -88,7 +99,7 @@ class SponsortimeTable(tables.Table):
 
     @staticmethod
     def render_shadowhidden(value: int) -> str:
-        if value == 1:
+        if value >= 1:
             return format_html('<span title="This segment has been shadowhidden.">❌</span>')
         return '—'
 

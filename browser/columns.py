@@ -3,11 +3,20 @@ import datetime
 import django_tables2 as tables
 
 from django.db.models import F, QuerySet
+from django.utils.html import format_html
 
 
 class LengthColumn(tables.Column):
-    def render(self, value: float) -> datetime.timedelta:
-        return datetime.timedelta(seconds=value)
+    def render(self, value: float) -> str:
+        time = str(datetime.timedelta(seconds=value))
+        try:
+            time, decimal = time.split('.')
+            decimal = decimal.rstrip('0')
+            if len(decimal) > 3:
+                return format_html('{}.<strong>{}</strong>', time, decimal)
+            return f'{time}.{decimal}'
+        except ValueError:
+            return time
 
     def order(self, queryset: QuerySet, is_descending: bool) -> (QuerySet, bool):
         queryset = queryset.annotate(

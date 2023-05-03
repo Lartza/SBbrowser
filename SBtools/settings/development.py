@@ -12,13 +12,17 @@ DATABASES = {
         'NAME': 'sponsorblock',
         'USER': 'sponsorblock',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': '192.168.1.148',
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': 'redis://192.168.1.148:6379',
     }
 }
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

@@ -51,7 +51,7 @@ def populate_context(context, filter_args):
     context['user_submissions'] = Sponsortime.objects.filter(**filter_args).count()
     context['user_ignored'] = Sponsortime.objects.filter(**filter_args).filter(votes__lte=-2).count()
     context['user_hidden'] = Sponsortime.objects.filter(**filter_args).filter(votes__gte=-1).filter(
-        Q(hidden=1) | Q(shadowhidden=1)).count()
+        Q(hidden=1) | Q(shadowhidden__gte=1)).count()
     if context['user_submissions'] != 0:
         context['percent_ignored'] = round(context['user_ignored'] / context['user_submissions'] * 100, 1)
     else:
@@ -72,7 +72,7 @@ def populate_context_video_details(context, videoid):
     context['submissions'] = Sponsortime.objects.filter(videoid=videoid).count()
     context['ignored'] = Sponsortime.objects.filter(videoid=videoid).filter(votes__lte=-2).count()
     context['hidden'] = Sponsortime.objects.filter(videoid=videoid).filter(votes__gte=-1).filter(
-        Q(hidden=1) | Q(shadowhidden=1)).count()
+        Q(hidden=1) | Q(shadowhidden__gte=1)).count()
 
     context['lockcategories_skip'] = context['lockcategories_mute'] = context['lockcategories_full'] = None
     lockcategories = Lockcategory.objects.filter(videoid=videoid)

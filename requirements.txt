@@ -1,8 +1,8 @@
-Django==4.1.7
-django-bootstrap5==22.2
+Django==4.2
+django-bootstrap5==23.1
 django-tables2==2.5.3
-django-filter==23.1
-psycopg2==2.9.5
+django-filter==23.2
+psycopg[c]==3.1.9
 python-dateutil==2.8.2
 timeago==1.0.16
 redis==4.5.4

@@ -31,7 +31,8 @@ class UserIDFilter(FilterSet):
                                              ('preview', 'Preview'), ('selfpromo', 'Selfpromo'),
                                              ('sponsor', 'Sponsor'),), distinct=False)
     category.always_filter = False
-    shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden')
+    shadowhidden = ChoiceFilter(choices=((0, 'No'), (1, 'Yes')), empty_label='Shadowhidden',
+                                method='shadowhidden_filter')
     actiontype = MultipleChoiceFilter(choices=(('chapter', 'Chapter'), ('full', 'Full Video Label'),
                                                ('poi', 'Highlight'), ('mute', 'Mute'), ('skip', 'Skip')),
                                       distinct=False)
@@ -40,6 +41,12 @@ class UserIDFilter(FilterSet):
         model = Sponsortime
         fields = FIELDS
         exclude = ['username', 'user']
+
+    @staticmethod
+    def shadowhidden_filter(queryset, name, value):
+        if value == 1:
+            return queryset.filter(shadowhidden__gte=1)
+        return queryset.filter(shadowhidden=0)
 
 
 class UsernameFilter(UserIDFilter):
