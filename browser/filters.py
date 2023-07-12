@@ -43,7 +43,7 @@ class UserIDFilter(FilterSet):
         exclude = ['username', 'user']
 
     @staticmethod
-    def shadowhidden_filter(queryset, name, value):
+    def shadowhidden_filter(queryset, _name, value):
         if value == 1:
             return queryset.filter(shadowhidden__gte=1)
         return queryset.filter(shadowhidden=0)
