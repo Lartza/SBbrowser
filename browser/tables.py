@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-import datetime
+from datetime import datetime, timedelta, timezone
 
 from django.utils.html import format_html
 from django.db.models import F, QuerySet
@@ -40,14 +40,14 @@ class SponsortimeTable(tables.Table):
 
     @staticmethod
     def render_timesubmitted(value: float) -> str:
-        return datetime.datetime.utcfromtimestamp(value / 1000.).strftime('%Y-%m-%d %H:%M:%S')
+        return datetime.fromtimestamp(value / 1000., tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
     @staticmethod
     def render_time(value: float) -> str:
         if value < 0:
-            time = f'-{str(datetime.timedelta(seconds=-value))}'
+            time = f'-{str(timedelta(seconds=-value))}'
         else:
-            time = str(datetime.timedelta(seconds=value))
+            time = str(timedelta(seconds=value))
         try:
             time, decimal = time.split('.')
             decimal = decimal.rstrip('0')

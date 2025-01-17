@@ -27,23 +27,24 @@ def updated() -> str:
 
 
 def get_yt_video_id(url):
-    """Returns Video_ID extracting from the given url of YouTube"""
+    """Returns the Video ID extracted from the given YouTube URL."""
 
-    if url.startswith(('youtu', 'www')):
-        url = 'http://' + url
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
 
     query = urlparse(url)
 
     if query.hostname is None:
         raise ValueError('No hostname found')
 
-    if 'youtube' in query.hostname:
+    if 'youtube.com' in query.hostname:
         if query.path == '/watch':
-            return parse_qs(query.query)['v'][0]
+            return parse_qs(query.query).get('v', [None])[0]
         if query.path.startswith(('/embed/', '/v/')):
             return query.path.split('/')[2]
     elif 'youtu.be' in query.hostname:
-        return query.path[1:]
+        return query.path.lstrip('/')
+
     raise ValueError('Not a YouTube URL')
 
 
@@ -104,6 +105,7 @@ class FilteredSponsortimeListView(SingleTableView):
     def get(self, request, *args, **kwargs):
         videoid = request.GET.get('videoid')
         if videoid:
+            videoid = get_yt_video_id(videoid) if len(videoid) > 12 else videoid
             return HttpResponseRedirect(reverse('video', args=[videoid]))
         username = request.GET.get('username')
         if username:
@@ -258,7 +260,6 @@ class FilteredUUIDListView(SingleTableMixin, FilterView):
     filterset_class = VideoFilter
 
 
-def view_404(request, exception):
-    del exception  # unused
+def view_404(request, _exception):
     context = {'updated': updated()}
     return render(request, 'browser/404.html', status=404, context=context)

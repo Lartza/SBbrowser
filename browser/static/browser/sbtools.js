@@ -24,4 +24,4 @@ for (let i = 0, element; element = elements[i]; i++) {
     });
 }
 
-window.onunload = function(){};
+window.onpagehide = function(){};

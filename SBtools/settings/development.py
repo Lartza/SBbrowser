@@ -12,14 +12,14 @@ DATABASES = {
         'NAME': 'sponsorblock',
         'USER': 'sponsorblock',
         'PASSWORD': '',
-        'HOST': '192.168.1.148',
+        'HOST': '127.0.0.1',
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://192.168.1.148:6379',
+        'LOCATION': 'redis://127.0.0.1:6379',
     }
 }
 
