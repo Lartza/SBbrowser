@@ -8,71 +8,84 @@ class Config(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'config'
+        db_table = "config"
+
+    def __str__(self) -> str:
+        return f"{self.key}: {self.value}"
 
 
 class Username(models.Model):
-    userid = models.TextField(primary_key=True, db_column='userID')
-    username = models.TextField(verbose_name='Username', db_column='userName')
+    userid = models.TextField(primary_key=True, db_column="userID")
+    username = models.TextField(verbose_name="Username", db_column="userName")
     locked = models.IntegerField(default=0)
 
     class Meta:
         managed = False
-        db_table = 'userNames'
+        db_table = "userNames"
+
+    def __str__(self) -> str:
+        return f"{self.username} ({self.userid})"
+
+
+class Vipuser(models.Model):
+    userid = models.TextField(primary_key=True, db_column="userID")
+
+    class Meta:
+        managed = False
+        db_table = "vipUsers"
 
     def __str__(self) -> str:
         return self.userid
 
 
-class Vipuser(models.Model):
-    userid = models.TextField(primary_key=True, db_column='userID')
-
-    class Meta:
-        managed = False
-        db_table = 'vipUsers'
-
-
 class Lockcategory(models.Model):
-    videoid = models.TextField(db_column='videoID')
-    userid = models.TextField(db_column='userID')
-    actiontype = models.TextField(default='skip', db_column='actionType')
+    videoid = models.TextField(db_column="videoID")
+    userid = models.TextField(db_column="userID")
+    actiontype = models.TextField(default="skip", db_column="actionType")
     category = models.TextField()
-    hashedvideoid = models.TextField(blank=True, default='', db_column='hashedVideoID')
-    reason = models.TextField(blank=True, default='')
-    service = models.TextField(default='YouTube')
+    hashedvideoid = models.TextField(blank=True, default="", db_column="hashedVideoID")
+    reason = models.TextField(blank=True, default="")
+    service = models.TextField(default="YouTube")
     id = models.AutoField(primary_key=True)
 
     class Meta:
         managed = False
-        db_table = 'lockCategories'
+        db_table = "lockCategories"
+
+    def __str__(self) -> str:
+        return f"{self.videoid} - {self.category} ({self.actiontype}) by {self.userid}"
 
 
 class Sponsortime(models.Model):
-    videoid = models.TextField(verbose_name='Video ID', db_column='videoID')
-    starttime = models.FloatField(verbose_name='Start', db_column='startTime')
-    endtime = models.FloatField(verbose_name='End', db_column='endTime')
+    videoid = models.TextField(verbose_name="Video ID", db_column="videoID")
+    starttime = models.FloatField(verbose_name="Start", db_column="startTime")
+    endtime = models.FloatField(verbose_name="End", db_column="endTime")
     votes = models.IntegerField()
     locked = models.IntegerField(default=0)
-    incorrectvotes = models.IntegerField(default=1, db_column='incorrectVotes')
-    uuid = models.TextField(primary_key=True, verbose_name='UUID', db_column='UUID')
-    user = models.ForeignKey(Username, on_delete=models.PROTECT, db_constraint=False, verbose_name='UserID',
-                             db_column='userID')
-    timesubmitted = models.BigIntegerField(verbose_name='Submitted', db_column='timeSubmitted')
+    incorrectvotes = models.IntegerField(default=1, db_column="incorrectVotes")
+    uuid = models.TextField(primary_key=True, verbose_name="UUID", db_column="UUID")
+    user = models.ForeignKey(
+        Username, on_delete=models.PROTECT, db_constraint=False, verbose_name="UserID", db_column="userID"
+    )
+    timesubmitted = models.BigIntegerField(verbose_name="Submitted", db_column="timeSubmitted")
     views = models.IntegerField()
-    category = models.TextField(default='sponsor')
-    actiontype = models.TextField(default='skip', db_column='actionType')
-    service = models.TextField(default='YouTube')
-    videoduration = models.FloatField(default=0, db_column='videoDuration')
+    category = models.TextField(default="sponsor")
+    actiontype = models.TextField(default="skip", db_column="actionType")
+    service = models.TextField(default="YouTube")
+    videoduration = models.FloatField(default=0, db_column="videoDuration")
     hidden = models.IntegerField(default=0)
     reputation = models.FloatField(default=0)
-    shadowhidden = models.IntegerField(verbose_name='Shadowhidden', db_column='shadowHidden')
-    hashedvideoid = models.TextField(blank=True, default='', db_column='hashedVideoID')
-    useragent = models.TextField(blank=True, default='', db_column='userAgent')
-    description = models.TextField(blank=True, default='')
+    shadowhidden = models.IntegerField(verbose_name="Shadowhidden", db_column="shadowHidden")
+    hashedvideoid = models.TextField(blank=True, default="", db_column="hashedVideoID")
+    useragent = models.TextField(blank=True, default="", db_column="userAgent")
+    description = models.TextField(blank=True, default="")
 
     class Meta:
         managed = False
-        db_table = 'sponsorTimes'
+        db_table = "sponsorTimes"
+
+    def __str__(self) -> str:
+        return f"{self.uuid} - {self.videoid} - {self.category} ({self.starttime} to {self.endtime})"
 
     def ignored(self) -> int:
         return self.votes <= -2
@@ -82,23 +95,29 @@ class Sponsortime(models.Model):
 
 
 class Categoryvote(models.Model):
-    uuid = models.TextField(db_column='UUID')
+    uuid = models.TextField(db_column="UUID")
     category = models.TextField()
     votes = models.IntegerField(default=0)
     id = models.AutoField(primary_key=True)
 
     class Meta:
         managed = False
-        db_table = 'categoryVotes'
+        db_table = "categoryVotes"
+
+    def __str__(self) -> str:
+        return f"{self.uuid} - {self.category} ({self.votes})"
 
 
 class Warnings(models.Model):
-    userid = models.TextField(db_column='userID')
-    issuetime = models.IntegerField(db_column='issueTime', primary_key=True)
-    issueruserid = models.TextField(db_column='issuerUserID')
+    userid = models.TextField(db_column="userID")
+    issuetime = models.IntegerField(db_column="issueTime", primary_key=True)
+    issueruserid = models.TextField(db_column="issuerUserID")
     enabled = models.IntegerField()
-    reason = models.TextField(blank=True, default='')
+    reason = models.TextField(blank=True, default="")
 
     class Meta:
         managed = False
-        db_table = 'warnings'
+        db_table = "warnings"
+
+    def __str__(self) -> str:
+        return f"{self.userid} - {self.reason} ({self.issuetime})"
