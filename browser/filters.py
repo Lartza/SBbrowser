@@ -38,6 +38,7 @@ class UserIDFilter(FilterSet):
             ("exclusive_access", "Exclusive Access"),
             ("filler", "Filler"),
             ("poi_highlight", "Highlight"),
+            ("hook", "Hook"),
             ("interaction", "Interaction"),
             ("intro", "Intro"),
             ("music_offtopic", "Non-Music"),
