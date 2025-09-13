@@ -18,9 +18,9 @@
         </div>
         <div class="col-auto">
             <ul class="list-group">
-            {% for userid in uniques %}
-                {% is_vip userid as vip %}
-                <li class="list-group-item"><a href="/userid/{{ userid }}/">{{ userid }}</a>{% if vip %}<span title="This user is a VIP" class="ms-1">👑</span>{% endif %}</li>
+            {% for u in uniques %}
+                {% is_vip u.userid as vip %}
+                <li class="list-group-item"><a href="/userid/{{ u.userid }}/">{{ u.userid }}</a>{% if vip %}<span title="This user is a VIP" class="ms-1">👑</span>{% endif %}</li>
             {% endfor %}
             </ul>
         </div>
